@@ -63,16 +63,21 @@ export const Profile = () => {
       return;
     }
     if (!profileUser) return;
-    
+
+    // Requested state: button should do nothing
+    if (followStatus === 'requested') return;
+
     setIsFollowLoading(true);
     try {
       if (followStatus === 'none') {
+        // Send a follow request
         const res = await followUser(profileUser._id);
         if (res.status === 'success') {
           setFollowStatus('requested');
           toast.success(`Follow request sent to ${profileUser.name}`);
         }
-      } else {
+      } else if (followStatus === 'following') {
+        // Unfollow the user
         const res = await unfollowUser(profileUser._id);
         if (res.status === 'success') {
           setFollowStatus('none');
@@ -146,9 +151,10 @@ export const Profile = () => {
             ) : (
               <Button 
                 onClick={handleFollowToggle}
-                isLoading={isFollowLoading}
+                isLoading={isFollowLoading && followStatus !== 'requested'}
+                disabled={followStatus === 'requested'}
                 variant={followStatus !== 'none' ? 'secondary' : 'primary'}
-                className="rounded-full shadow-lg"
+                className={`rounded-full shadow-lg ${followStatus === 'requested' ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {followStatus === 'none' && <><UserPlus size={18} className="mr-2" /> Follow</>}
                 {followStatus === 'requested' && <><UserCheck size={18} className="mr-2" /> Requested</>}
