@@ -163,6 +163,21 @@ export const addReply = async (commentId, postId, content) => {
   return response.data.data?.comment || response.data.data?.data || response.data;
 };
 
+export const updateComment = async (commentId, content) => {
+  const response = await apiClient.patch(`/comments/${commentId}`, { content });
+  return response.data;
+};
+
+export const deleteComment = async (commentId) => {
+  const response = await apiClient.delete(`/comments/${commentId}`);
+  return response.data;
+};
+
+export const likeComment = async (commentId) => {
+  const response = await apiClient.post(`/comments/${commentId}/likes`);
+  return response.data;
+};
+
 // ==========================================
 // NOTIFICATIONS
 // ==========================================

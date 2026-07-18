@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, MessageCircle, Share2, MoreHorizontal, Send, Trash2, Edit2, Flag, Link, X, Check, Image as ImageIcon, Video as VideoIcon } from 'lucide-react';
 import { Button } from './Button';
-import { likePost, getComments, addComment, updatePost, deletePost, addReply, getReplies } from '../services/api';
+import { likePost, getComments, addComment, updatePost, deletePost, addReply, getReplies, likeComment, deleteComment, updateComment } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,57 @@ const CommentItem = ({ comment, postId, user }) => {
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
   const [newReply, setNewReply] = useState("");
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
+  
+  const [isLiked, setIsLiked] = useState(comment.isLiked || false);
+  const [likes, setLikes] = useState(comment.likes || 0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(comment.content);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const inputRef = useRef(null);
+
+  const handleLike = async () => {
+    if (!user) return toast('Please log in', { icon: '👋' });
+    setIsLiked(!isLiked);
+    setLikes(isLiked ? likes - 1 : likes + 1);
+    try {
+      await likeComment(comment._id);
+    } catch (err) {
+      setIsLiked(isLiked);
+      setLikes(likes);
+    }
+  };
+
+  const handleEdit = async () => {
+    if (!editContent.trim() || editContent === comment.content) {
+      setIsEditing(false);
+      return;
+    }
+    try {
+      await updateComment(comment._id, editContent);
+      comment.content = editContent;
+      setIsEditing(false);
+    } catch (err) {
+      toast.error('Failed to edit comment');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Delete comment?")) return;
+    try {
+      await deleteComment(comment._id);
+      setIsDeleted(true);
+    } catch (err) {
+      toast.error('Failed to delete comment');
+    }
+  };
+
+  const handleReplyTag = (name) => {
+    setNewReply(`@${name} `);
+    setShowReplies(true);
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+  
+  if (isDeleted) return null;
 
   const handleToggleReplies = async () => {
     setShowReplies(!showReplies);
@@ -53,13 +104,38 @@ const CommentItem = ({ comment, postId, user }) => {
             <span className="font-semibold text-sm text-white">{comment.author.name}</span>
             <span className="text-[10px] text-slate-500 uppercase tracking-wider">{new Date(comment.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
           </div>
-          <p className="text-sm text-slate-300">{comment.content}</p>
+          {isEditing ? (
+            <div className="mt-2">
+              <input 
+                type="text" 
+                value={editContent} 
+                onChange={(e) => setEditContent(e.target.value)} 
+                className="w-full bg-white/10 border border-white/20 rounded-md py-1 px-2 text-xs text-white focus:outline-none focus:border-primary-500"
+              />
+              <div className="flex space-x-2 mt-2">
+                <button onClick={handleEdit} className="text-[10px] bg-primary-500 text-white px-2 py-1 rounded">Save</button>
+                <button onClick={() => setIsEditing(false)} className="text-[10px] bg-white/10 text-white px-2 py-1 rounded">Cancel</button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-slate-300">{comment.content}</p>
+          )}
         </div>
       </div>
-      <div className="flex justify-start pl-11">
+      <div className="flex justify-start pl-11 space-x-4 items-center mt-1">
+        <button onClick={handleLike} className={`text-xs flex items-center space-x-1 ${isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-white'}`}>
+          <Heart size={12} className={isLiked ? "fill-rose-500" : ""} />
+          <span>{likes > 0 ? likes : ''}</span>
+        </button>
         <button onClick={handleToggleReplies} className="text-xs text-primary-400 hover:text-primary-300 transition-colors">
           {showReplies ? "Hide Replies" : "Reply"}
         </button>
+        {user && user._id === comment.author._id && (
+          <>
+            <button onClick={() => setIsEditing(!isEditing)} className="text-xs text-slate-400 hover:text-white">Edit</button>
+            <button onClick={handleDelete} className="text-xs text-slate-400 hover:text-rose-500">Delete</button>
+          </>
+        )}
       </div>
       
       <AnimatePresence>
@@ -73,20 +149,28 @@ const CommentItem = ({ comment, postId, user }) => {
             {isLoadingReplies ? (
                <div className="w-4 h-4 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
             ) : replies.map(reply => (
-               <div key={reply._id} className="flex space-x-2">
-                 <img src={reply.author?.profileImage || 'https://i.pravatar.cc/150'} alt={reply.author?.name} className="w-6 h-6 rounded-full object-cover mt-1" />
-                 <div className="flex-1 bg-white/5 p-2 rounded-xl rounded-tl-sm">
-                   <div className="flex justify-between items-baseline mb-1">
-                     <span className="font-semibold text-xs text-white">{reply.author?.name || 'User'}</span>
-                     {reply.createdAt && <span className="text-[10px] text-slate-500 uppercase tracking-wider">{new Date(reply.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>}
+               <div key={reply._id} className="mb-2">
+                 <div className="flex space-x-2">
+                   <img src={reply.author?.profileImage || 'https://i.pravatar.cc/150'} alt={reply.author?.name} className="w-6 h-6 rounded-full object-cover mt-1" />
+                   <div className="flex-1 bg-white/5 p-2 rounded-xl rounded-tl-sm">
+                     <div className="flex justify-between items-baseline mb-1">
+                       <span className="font-semibold text-xs text-white">{reply.author?.name || 'User'}</span>
+                       {reply.createdAt && <span className="text-[10px] text-slate-500 uppercase tracking-wider">{new Date(reply.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>}
+                     </div>
+                     <p className="text-xs text-slate-300">{reply.content}</p>
                    </div>
-                   <p className="text-xs text-slate-300">{reply.content}</p>
+                 </div>
+                 <div className="flex justify-start pl-9 space-x-3 mt-0.5">
+                   <button onClick={() => handleReplyTag(reply.author?.name)} className="text-[10px] text-slate-500 hover:text-white transition-colors">
+                     Reply
+                   </button>
                  </div>
                </div>
             ))}
             
             <form onSubmit={handleSubmitReply} className="flex space-x-2 mt-2">
               <input
+                ref={inputRef}
                 type="text"
                 value={newReply}
                 onChange={(e) => setNewReply(e.target.value)}
