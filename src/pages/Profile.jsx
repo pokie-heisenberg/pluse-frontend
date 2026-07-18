@@ -31,7 +31,16 @@ export const Profile = () => {
         } else {
           const res = await getUserProfile(targetId);
           if (res.status === 'success') {
-            setProfileUser(res.data.doc);
+            const userData = res.data.doc;
+            setProfileUser(userData);
+            
+            if (userData.isFollowed) {
+              setFollowStatus('following');
+            } else if (userData.isRequested) {
+              setFollowStatus('requested');
+            } else {
+              setFollowStatus('none');
+            }
           }
         }
         
