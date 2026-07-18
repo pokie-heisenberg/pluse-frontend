@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Attempt to fetch the user profile using the secure cookie
+    // Attempt to fetch the user profile using the stored token / secure cookie
     const initAuth = async () => {
       try {
         const data = await getCurrentUser();
@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
       } catch (error) {
         console.error("Session expired or not logged in");
+        localStorage.removeItem('pluse_token');
         setUser(null);
       } finally {
         setLoading(false);
@@ -27,8 +28,10 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  const login = (userData) => {
-    // We no longer manually manage the token. The cookie is set by the backend.
+  const login = (userData, token) => {
+    if (token) {
+      localStorage.setItem('pluse_token', token);
+    }
     setUser(userData);
   };
 
@@ -37,6 +40,7 @@ export const AuthProvider = ({ children }) => {
       // Hit backend to clear the cookie (if your backend has this route)
       await apiClient.get('/users/logout').catch(() => {});
     } catch(err) {}
+    localStorage.removeItem('pluse_token');
     setUser(null);
   };
 

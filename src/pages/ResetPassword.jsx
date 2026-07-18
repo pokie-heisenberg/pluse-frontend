@@ -31,7 +31,7 @@ export const ResetPassword = () => {
       
       const userData = response.data?.user || response.data?.doc || response;
       if (userData) {
-        login(userData);
+        login(userData, response.token);
       }
 
       setSuccess(true);

@@ -28,7 +28,7 @@ export const Signup = () => {
     
     try {
       const response = await signupUser({ name, email, password, passwordConfirm });
-      login(response.data.user);
+      login(response.data.user, response.token);
       navigate('/');
     } catch (err) {
       setError('Registration failed. Please try again.');

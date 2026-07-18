@@ -23,7 +23,7 @@ export const Login = () => {
     try {
       const response = await loginUser(email, password);
       const userData = response.data?.user || response.data?.doc || response;
-      login(userData);
+      login(userData, response.token);
       navigate('/');
     } catch (err) {
       setError('Invalid email or password');

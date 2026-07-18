@@ -5,6 +5,15 @@ const apiClient = axios.create({
   withCredentials: true, // Crucial for sending secure cookies automatically
 });
 
+// Interceptor to attach JWT token from localStorage as Authorization header
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('pluse_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Interceptor to handle global unauthorized responses
 apiClient.interceptors.response.use(
   (response) => response,
