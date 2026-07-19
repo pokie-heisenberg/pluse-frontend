@@ -8,6 +8,7 @@ import { Profile } from './pages/Profile';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
 import { VerifyEmail } from './pages/VerifyEmail';
+import { TwoFactorVerify } from './pages/TwoFactorVerify';
 import { Settings } from './pages/Settings';
 import { Search } from './pages/Search';
 import { Notifications } from './pages/Notifications';
@@ -51,6 +52,7 @@ function AppRoutes() {
       <Route path="/reset-password/:token" element={<PublicRoute><ResetPassword /></PublicRoute>} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
+      <Route path="/2fa" element={<TwoFactorVerify />} />
       
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

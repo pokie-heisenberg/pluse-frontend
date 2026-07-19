@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { Shield, User, Bell, Lock } from 'lucide-react';
 import { Button } from '../components/Button';
-import { updateProfile, updatePassword } from '../services/api';
+import { updateProfile, updatePassword, toggleTwoFactor } from '../services/api';
 
 export const Settings = () => {
   const { user, login } = useAuth();
@@ -18,6 +18,28 @@ export const Settings = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [passwordMsg, setPasswordMsg] = useState({ type: '', text: '' });
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(user?.twoFactorEnable || false);
+  const [isToggling2FA, setIsToggling2FA] = useState(false);
+  const [twoFAMsg, setTwoFAMsg] = useState(null);
+
+  const handleToggle2FA = async () => {
+    setIsToggling2FA(true);
+    setTwoFAMsg(null);
+    try {
+      const res = await toggleTwoFactor();
+      setTwoFactorEnabled(res.twoFactorEnable);
+      setTwoFAMsg({
+        type: 'success',
+        text: res.twoFactorEnable
+          ? '2FA enabled! Your account is now more secure.'
+          : '2FA disabled.',
+      });
+    } catch (err) {
+      setTwoFAMsg({ type: 'error', text: 'Failed to toggle 2FA. Please try again.' });
+    } finally {
+      setIsToggling2FA(false);
+    }
+  };
 
   if (!user) return null;
 
@@ -223,6 +245,46 @@ export const Settings = () => {
             <Button type="submit" isLoading={isUpdatingPassword}>Change Password</Button>
           </div>
         </form>
+
+        {/* 2FA Toggle */}
+        <div className="mt-8 pt-6 border-t border-white/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="text-white font-semibold flex items-center gap-2">
+                <Shield size={18} className="text-primary-400" />
+                Two-Factor Authentication
+              </h4>
+              <p className="text-slate-400 text-sm mt-1">
+                {twoFactorEnabled
+                  ? '2FA is active. Your account is extra secure.'
+                  : 'Add an extra layer of security to your account.'}
+              </p>
+            </div>
+            <button
+              id="toggle-2fa-btn"
+              onClick={handleToggle2FA}
+              disabled={isToggling2FA}
+              className={`relative w-14 h-7 rounded-full transition-all duration-300 focus:outline-none ${
+                twoFactorEnabled
+                  ? 'bg-gradient-to-r from-primary-600 to-accent-500 shadow-[0_0_12px_rgba(139,92,246,0.4)]'
+                  : 'bg-white/10'
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-300 ${
+                  twoFactorEnabled ? 'translate-x-7' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+          {twoFAMsg && (
+            <p className={`mt-3 text-sm ${
+              twoFAMsg.type === 'success' ? 'text-green-400' : 'text-red-400'
+            }`}>
+              {twoFAMsg.text}
+            </p>
+          )}
+        </div>
       </motion.div>
     </div>
   );

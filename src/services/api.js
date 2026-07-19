@@ -24,6 +24,16 @@ export const resetPassword = async (token, password, passwordConfirm) => {
   return response.data;
 };
 
+export const verifyOTP = async (userId, otp) => {
+  const response = await apiClient.post('/users/verify-otp', { userId, otp });
+  return response.data;
+};
+
+export const toggleTwoFactor = async () => {
+  const response = await apiClient.patch('/users/toggle-2fa');
+  return response.data;
+};
+
 export const verifyEmail = async (token) => {
   const response = await apiClient.get(`/users/verify/${token}`);
   return response.data;

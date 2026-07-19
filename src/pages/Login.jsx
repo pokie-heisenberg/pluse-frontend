@@ -22,6 +22,12 @@ export const Login = () => {
     
     try {
       const response = await loginUser(email, password);
+
+      if (response.status === 'otp_required') {
+        navigate('/2fa', { state: { userId: response.userId } });
+        return;
+      }
+
       const userData = response.data?.user || response.data?.doc || response;
       login(userData, response.token);
       navigate('/');
