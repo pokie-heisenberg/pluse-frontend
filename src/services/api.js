@@ -24,6 +24,11 @@ export const resetPassword = async (token, password, passwordConfirm) => {
   return response.data;
 };
 
+export const verifyEmail = async (token) => {
+  const response = await apiClient.get(`/users/verify/${token}`);
+  return response.data;
+};
+
 export const updatePassword = async (password, newPassword, newPasswordConfirm) => {
   const response = await apiClient.patch('/users/updatePassword', { password, newPassword, newPasswordConfirm });
   return response.data;

@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User } from 'lucide-react';
 import { Button } from '../components/Button';
 import { signupUser } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
 
 export const Signup = () => {
   const [name, setName] = useState('');
@@ -15,7 +14,6 @@ export const Signup = () => {
   const [error, setError] = useState(null);
   
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,11 +25,10 @@ export const Signup = () => {
     setError(null);
     
     try {
-      const response = await signupUser({ name, email, password, passwordConfirm });
-      login(response.data.user, response.token);
-      navigate('/');
+      await signupUser({ name, email, password, passwordConfirm });
+      navigate('/verify-email');
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

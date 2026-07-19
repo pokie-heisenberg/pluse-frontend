@@ -7,6 +7,7 @@ import { Signup } from './pages/Signup';
 import { Profile } from './pages/Profile';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
+import { VerifyEmail } from './pages/VerifyEmail';
 import { Settings } from './pages/Settings';
 import { Search } from './pages/Search';
 import { Notifications } from './pages/Notifications';
@@ -48,6 +49,8 @@ function AppRoutes() {
       <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
       <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
       <Route path="/reset-password/:token" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/verify-email/:token" element={<VerifyEmail />} />
       
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
