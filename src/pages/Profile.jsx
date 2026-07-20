@@ -5,6 +5,7 @@ import { Settings, MapPin, Link as LinkIcon, Calendar, Loader2, UserPlus, UserMi
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { PostCard } from '../components/PostCard';
+import { FollowListModal } from '../components/FollowListModal';
 import { getUserProfile, followUser, unfollowUser, getUserPosts } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -18,6 +19,7 @@ export const Profile = () => {
   const [isFollowLoading, setIsFollowLoading] = useState(false);
   const [followStatus, setFollowStatus] = useState('none'); // none, requested, following
   const [userPosts, setUserPosts] = useState([]);
+  const [followModal, setFollowModal] = useState({ open: false, mode: 'followers' });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -180,14 +182,22 @@ export const Profile = () => {
           </div>
 
           <div className="mt-6 flex gap-6 border-b border-white/10 pb-6">
-            <div className="flex flex-col">
+            <button
+              className="follow-stat-btn"
+              onClick={() => setFollowModal({ open: true, mode: 'following' })}
+              aria-label="View following"
+            >
               <span className="text-2xl font-bold text-white">{profileUser.following}</span>
               <span className="text-sm text-slate-400 uppercase tracking-wider font-medium">Following</span>
-            </div>
-            <div className="flex flex-col">
+            </button>
+            <button
+              className="follow-stat-btn"
+              onClick={() => setFollowModal({ open: true, mode: 'followers' })}
+              aria-label="View followers"
+            >
               <span className="text-2xl font-bold text-white">{profileUser.follower}</span>
               <span className="text-sm text-slate-400 uppercase tracking-wider font-medium">Followers</span>
-            </div>
+            </button>
           </div>
         </motion.div>
       </div>
@@ -208,6 +218,14 @@ export const Profile = () => {
           </div>
         )}
       </motion.div>
+
+      {/* Followers / Following Modal */}
+      <FollowListModal
+        isOpen={followModal.open}
+        onClose={() => setFollowModal((s) => ({ ...s, open: false }))}
+        userId={profileUser._id}
+        mode={followModal.mode}
+      />
     </div>
   );
 };

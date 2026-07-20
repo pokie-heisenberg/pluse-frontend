@@ -92,6 +92,16 @@ export const declineFollow = async (userId) => {
   return response.data;
 };
 
+export const getUserFollowers = async (userId, page = 1, limit = 20) => {
+  const response = await apiClient.get(`/users/${userId}/followers?page=${page}&limit=${limit}`);
+  return response.data;
+};
+
+export const getUserFollowing = async (userId, page = 1, limit = 20) => {
+  const response = await apiClient.get(`/users/${userId}/following?page=${page}&limit=${limit}`);
+  return response.data;
+};
+
 // ==========================================
 // POSTS & FEED
 // ==========================================
