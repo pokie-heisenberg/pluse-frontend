@@ -2,15 +2,37 @@ import { Menu, Bell } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSidebar } from '../contexts/SidebarContext';
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { getNotifications } from '../services/api';
 
 /**
  * MobileHeader — shown only on mobile (< md).
- * Contains hamburger toggle, logo text, and quick avatar link.
+ * Contains hamburger toggle, logo text, quick notifications, and quick avatar link.
  */
 export const MobileHeader = () => {
   const { toggle } = useSidebar();
   const { user } = useAuth();
+  const location = useLocation();
+  const [hasUnread, setHasUnread] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (location.pathname === '/notifications') {
+        setHasUnread(false);
+      } else {
+        const fetchUnread = async () => {
+          try {
+            const data = await getNotifications();
+            setHasUnread(data.some(n => !n.read));
+          } catch (err) {
+            console.error(err);
+          }
+        };
+        fetchUnread();
+      }
+    }
+  }, [user, location.pathname]);
 
   return (
     <motion.header
@@ -48,15 +70,23 @@ export const MobileHeader = () => {
       </Link>
 
       {/* Avatar / Bell */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {user ? (
-          <Link to="/profile" aria-label="My profile">
-            <img
-              src={user.profileImage}
-              alt={user.name}
-              className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10 hover:ring-primary-500/60 transition-all"
-            />
-          </Link>
+          <>
+            <Link to="/notifications" aria-label="Notifications" className="relative p-1.5 text-slate-300 hover:text-white transition-colors">
+              <Bell size={22} />
+              {hasUnread && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a1a] z-20 animate-pulse"></span>
+              )}
+            </Link>
+            <Link to="/profile" aria-label="My profile">
+              <img
+                src={user.profileImage}
+                alt={user.name}
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10 hover:ring-primary-500/60 transition-all"
+              />
+            </Link>
+          </>
         ) : (
           <Link
             to="/login"
