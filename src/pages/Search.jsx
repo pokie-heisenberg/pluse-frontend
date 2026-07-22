@@ -42,10 +42,10 @@ export const Search = () => {
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="sticky top-0 z-20 bg-[#030303]/60 backdrop-blur-xl pb-4 pt-4 mb-8 border-b border-white/5"
+        className="sticky top-0 z-20 bg-[#030303]/60 backdrop-blur-xl pb-3 pt-3 mb-6 border-b border-white/5"
       >
-        <h2 className="text-2xl font-bold tracking-tight text-white flex items-center">
-          Search Users <SearchIcon className="ml-2 text-primary-400" size={20} />
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center">
+          Search Users <SearchIcon className="ml-2 text-primary-400" size={18} />
         </h2>
       </motion.div>
 

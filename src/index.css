@@ -77,6 +77,51 @@
 }
 
 /* =========================================================
+   Mobile / Responsive Utilities
+   ========================================================= */
+
+/* Smooth scrolling everywhere */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Better touch targets */
+button, a {
+  touch-action: manipulation;
+}
+
+/* Safe-area for notched phones (iOS) */
+@supports (padding: max(0px)) {
+  .mobile-safe {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  main {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent body scroll when mobile sidebar is open */
+body.sidebar-open {
+  overflow: hidden;
+}
+
+/* Mobile header gradient glass */
+.mobile-header-glass {
+  background: rgba(3, 3, 3, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Sidebar drawer shadow */
+.sidebar-drawer-shadow {
+  box-shadow: 6px 0 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+
+/* =========================================================
    Follow Stat Button (clickable count on profile)
    ========================================================= */
 .follow-stat-btn {

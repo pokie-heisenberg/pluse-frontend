@@ -76,15 +76,15 @@ export const Notifications = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 mt-16 md:mt-0">
-      <div className="flex justify-between items-center mb-8">
+    <div className="max-w-3xl mx-auto px-0 py-4 sm:py-8">
+      <div className="flex flex-wrap gap-3 justify-between items-center mb-6 sm:mb-8">
         <div>
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-500 tracking-tight">Notifications</h1>
-          <p className="text-slate-400 mt-2">Stay updated with your latest interactions.</p>
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-500 tracking-tight">Notifications</h1>
+          <p className="text-slate-400 mt-1 text-sm sm:text-base">Stay updated with your latest interactions.</p>
         </div>
         {notifications.some(n => !n.isRead) && (
-          <Button variant="ghost" onClick={handleMarkAllRead} className="text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl px-4 py-2 flex items-center">
-            <Check size={18} className="mr-2" />
+          <Button variant="ghost" onClick={handleMarkAllRead} className="text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl px-3 py-2 flex items-center text-sm">
+            <Check size={16} className="mr-2" />
             Mark all read
           </Button>
         )}

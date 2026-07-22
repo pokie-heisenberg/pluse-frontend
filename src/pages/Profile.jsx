@@ -117,13 +117,13 @@ export const Profile = () => {
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="h-48 md:h-64 rounded-b-3xl bg-gradient-to-r from-primary-600 to-accent-500 relative overflow-hidden"
+        className="h-36 sm:h-48 md:h-64 rounded-b-2xl sm:rounded-b-3xl bg-gradient-to-r from-primary-600 to-accent-500 relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-black/20"></div>
       </motion.div>
 
       {/* Profile Info */}
-      <div className="px-6 relative -mt-16 sm:-mt-20">
+      <div className="px-4 sm:px-6 relative -mt-12 sm:-mt-16 md:-mt-20">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -134,7 +134,7 @@ export const Profile = () => {
             <img 
               src={profileUser.profileImage} 
               alt={profileUser.name} 
-              className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-[#030303] object-cover bg-[#030303]"
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full border-4 border-[#030303] object-cover bg-[#030303]"
             />
             {profileUser.role === 'admin' && (
               <div className="absolute bottom-2 right-2 bg-gradient-to-r from-accent-500 to-primary-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border-2 border-[#030303]">
@@ -143,11 +143,11 @@ export const Profile = () => {
             )}
           </div>
 
-          <div className="mt-4 sm:mt-0 flex space-x-3">
+          <div className="mt-3 sm:mt-0 flex space-x-3">
             {isOwnProfile ? (
               <Link to="/settings">
-                <Button variant="secondary" className="rounded-full shadow-lg border-white/10 bg-white/5 backdrop-blur-md">
-                  <Settings size={18} className="mr-2" /> Edit Profile
+                <Button variant="secondary" className="rounded-full shadow-lg border-white/10 bg-white/5 backdrop-blur-md text-sm py-2">
+                  <Settings size={16} className="mr-1.5" /> Edit Profile
                 </Button>
               </Link>
             ) : (
@@ -156,11 +156,11 @@ export const Profile = () => {
                 isLoading={isFollowLoading && followStatus !== 'requested'}
                 disabled={followStatus === 'requested'}
                 variant={followStatus !== 'none' ? 'secondary' : 'primary'}
-                className={`rounded-full shadow-lg ${followStatus === 'requested' ? 'opacity-60 cursor-not-allowed' : ''}`}
+                className={`rounded-full shadow-lg text-sm py-2 ${followStatus === 'requested' ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
-                {followStatus === 'none' && <><UserPlus size={18} className="mr-2" /> Follow</>}
-                {followStatus === 'requested' && <><UserCheck size={18} className="mr-2" /> Requested</>}
-                {followStatus === 'following' && <><UserMinus size={18} className="mr-2" /> Unfollow</>}
+                {followStatus === 'none' && <><UserPlus size={16} className="mr-1.5" /> Follow</>}
+                {followStatus === 'requested' && <><UserCheck size={16} className="mr-1.5" /> Requested</>}
+                {followStatus === 'following' && <><UserMinus size={16} className="mr-1.5" /> Unfollow</>}
               </Button>
             )}
           </div>
@@ -170,15 +170,15 @@ export const Profile = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-4"
+          className="mt-3"
         >
-          <h1 className="text-3xl font-bold text-white">{profileUser.name}</h1>
-          <p className="text-slate-400 font-medium">@{profileUser.email.split('@')[0]}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">{profileUser.name}</h1>
+          <p className="text-slate-400 font-medium text-sm sm:text-base">@{profileUser.email.split('@')[0]}</p>
           
-          <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-400">
-            <div className="flex items-center"><MapPin size={16} className="mr-1" /> {profileUser.location || 'Unknown Location'}</div>
-            <div className="flex items-center"><LinkIcon size={16} className="mr-1 text-primary-400" /> <span className="text-primary-400 cursor-pointer hover:underline">pluse.app/{profileUser.email.split('@')[0]}</span></div>
-            <div className="flex items-center"><Calendar size={16} className="mr-1" /> Joined {new Date(profileUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
+          <div className="mt-3 flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-slate-400">
+            <div className="flex items-center"><MapPin size={14} className="mr-1" /> {profileUser.location || 'Unknown Location'}</div>
+            <div className="flex items-center"><LinkIcon size={14} className="mr-1 text-primary-400" /> <span className="text-primary-400 cursor-pointer hover:underline">pluse.app/{profileUser.email.split('@')[0]}</span></div>
+            <div className="flex items-center"><Calendar size={14} className="mr-1" /> Joined {new Date(profileUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
           </div>
 
           <div className="mt-6 flex gap-6 border-b border-white/10 pb-6">

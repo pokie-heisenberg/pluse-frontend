@@ -85,10 +85,10 @@ export const Home = () => {
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="sticky top-0 z-20 bg-[#030303]/60 backdrop-blur-xl pb-4 pt-4 mb-8 border-b border-white/5"
+        className="sticky top-0 z-20 bg-[#030303]/60 backdrop-blur-xl pb-3 pt-3 mb-6 border-b border-white/5"
       >
-        <h2 className="text-2xl font-bold tracking-tight text-white flex items-center">
-          Feed <Sparkles className="ml-2 text-primary-400" size={20} />
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center">
+          Feed <Sparkles className="ml-2 text-primary-400" size={18} />
         </h2>
       </motion.div>
 
@@ -98,12 +98,12 @@ export const Home = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/10 mb-10 group focus-within:border-primary-500/50 transition-colors"
+          className="bg-white/5 backdrop-blur-xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 mb-6 sm:mb-10 group focus-within:border-primary-500/50 transition-colors"
         >
-          <div className="flex space-x-4">
+          <div className="flex space-x-3 sm:space-x-4">
             <div className="relative shrink-0">
                <div className="absolute inset-0 bg-primary-500 rounded-full blur opacity-30"></div>
-               <img src={user.profileImage} alt="You" className="w-12 h-12 rounded-full object-cover relative z-10 ring-2 ring-white/10" />
+               <img src={user.profileImage} alt="You" className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover relative z-10 ring-2 ring-white/10" />
             </div>
             <div className="flex-1">
               <textarea
