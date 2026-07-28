@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, MessageCircle, Share2, MoreHorizontal, Send, Trash2, Edit2, Flag, Link, X, Check, Image as ImageIcon, Video as VideoIcon } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreHorizontal, Send, Trash2, Edit2, Flag, Link, X, Check, Image as ImageIcon, Video as VideoIcon, Bookmark } from 'lucide-react';
 import { Button } from './Button';
-import { likePost, getComments, addComment, updatePost, deletePost, addReply, getReplies, likeComment, deleteComment, updateComment } from '../services/api';
+import { likePost, getComments, addComment, updatePost, deletePost, addReply, getReplies, likeComment, deleteComment, updateComment, bookmarkPost, unbookmarkPost } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -200,6 +200,8 @@ export const PostCard = ({ post }) => {
   const [commentCount, setCommentCount] = useState(post.comments || 0);
   const [isDeleted, setIsDeleted] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked || false);
+  const [isBookmarking, setIsBookmarking] = useState(false);
   const navigate = useNavigate();
   
   const [showComments, setShowComments] = useState(false);
@@ -234,6 +236,28 @@ export const PostCard = ({ post }) => {
       console.error("Failed to like post", error);
     } finally {
       setIsLiking(false);
+    }
+  };
+
+  const handleBookmark = async () => {
+    if (!user) return toast('Please log in to bookmark posts', { icon: '🔖' });
+    const prev = isBookmarked;
+    setIsBookmarked(!prev);
+    setIsBookmarking(true);
+    try {
+      if (prev) {
+        await unbookmarkPost(post._id);
+        toast.success('Removed from bookmarks');
+      } else {
+        await bookmarkPost(post._id);
+        toast.success('Bookmarked!');
+      }
+    } catch (error) {
+      setIsBookmarked(prev);
+      toast.error('Failed to update bookmark');
+      console.error("Failed to bookmark post", error);
+    } finally {
+      setIsBookmarking(false);
     }
   };
 
@@ -633,6 +657,28 @@ export const PostCard = ({ post }) => {
         >
           <Share2 size={20} />
         </Button>
+
+        {/* Bookmark Button */}
+        <motion.div whileTap={{ scale: 0.8 }}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleBookmark}
+            disabled={isBookmarking}
+            className={`rounded-xl px-3 transition-all duration-200 ${isBookmarked ? 'text-accent-400 hover:text-accent-300' : 'text-slate-400 hover:text-white hover:bg-white/10'}`}
+            title={isBookmarked ? 'Remove bookmark' : 'Bookmark this post'}
+          >
+            <motion.div
+              animate={isBookmarked ? { scale: [1, 1.4, 1], rotate: [0, -10, 0] } : { scale: 1 }}
+              transition={{ duration: 0.35 }}
+            >
+              <Bookmark
+                size={20}
+                className={isBookmarked ? 'fill-accent-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]' : ''}
+              />
+            </motion.div>
+          </Button>
+        </motion.div>
       </div>
 
       {/* Comments Section */}

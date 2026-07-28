@@ -226,3 +226,22 @@ export const deleteNotification = async (notificationId) => {
   const response = await apiClient.delete(`/notifications/${notificationId}`);
   return response.data;
 };
+
+// ==========================================
+// BOOKMARKS
+// ==========================================
+
+export const getBookmarks = async () => {
+  const response = await apiClient.get('/bookmarks');
+  return response.data.data?.bookMarks || [];
+};
+
+export const bookmarkPost = async (postId) => {
+  const response = await apiClient.post(`/posts/${postId}/bookmark`);
+  return response.data;
+};
+
+export const unbookmarkPost = async (postId) => {
+  const response = await apiClient.delete(`/posts/${postId}/bookmark`);
+  return response.data;
+};

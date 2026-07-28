@@ -12,6 +12,7 @@ import { TwoFactorVerify } from './pages/TwoFactorVerify';
 import { Settings } from './pages/Settings';
 import { Search } from './pages/Search';
 import { Notifications } from './pages/Notifications';
+import { Bookmarks } from './pages/Bookmarks';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
@@ -42,7 +43,7 @@ function AppRoutes() {
         <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-        <Route path="bookmarks" element={<ProtectedRoute><div className="p-8 text-slate-400 text-center mt-20">Bookmarks (Coming Soon)</div></ProtectedRoute>} />
+        <Route path="bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
       </Route>
       
       {/* Auth Routes (No Sidebar) */}
