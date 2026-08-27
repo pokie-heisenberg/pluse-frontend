@@ -96,15 +96,15 @@ export const Profile = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 text-primary-500 animate-spin" />
+        <div className="w-8 h-8 border-2 border-accent-500/30 border-t-accent-500 rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!profileUser) {
     return (
-      <div className="text-center py-20 text-slate-400">
-        <p className="text-xl">User not found</p>
+      <div className="text-center py-20 text-text-tertiary">
+        <p className="text-xl font-medium">User not found</p>
       </div>
     );
   }
@@ -115,39 +115,42 @@ export const Profile = () => {
     <div className="max-w-3xl mx-auto relative z-10 pb-20">
       {/* Cover Photo */}
       <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="h-36 sm:h-48 md:h-64 rounded-b-2xl sm:rounded-b-3xl bg-gradient-to-r from-primary-600 to-accent-500 relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="h-36 sm:h-48 md:h-56 rounded-xl bg-gradient-to-br from-accent-600 via-accent-500 to-accent-700 relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/10" />
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
       </motion.div>
 
       {/* Profile Info */}
       <div className="px-4 sm:px-6 relative -mt-12 sm:-mt-16 md:-mt-20">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.4 }}
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between"
         >
           <div className="relative inline-block">
             <img 
               src={profileUser.profileImage} 
               alt={profileUser.name} 
-              className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full border-4 border-[#030303] object-cover bg-[#030303]"
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full border-4 border-bg-primary object-cover bg-bg-primary"
             />
             {profileUser.role === 'admin' && (
-              <div className="absolute bottom-2 right-2 bg-gradient-to-r from-accent-500 to-primary-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border-2 border-[#030303]">
+              <div className="absolute bottom-1 right-1 bg-gradient-to-r from-accent-500 to-accent-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border-2 border-bg-primary">
                 Admin
               </div>
             )}
           </div>
 
-          <div className="mt-3 sm:mt-0 flex space-x-3">
+          <div className="mt-3 sm:mt-0 flex space-x-2.5">
             {isOwnProfile ? (
               <Link to="/settings">
-                <Button variant="secondary" className="rounded-full shadow-lg border-white/10 bg-white/5 backdrop-blur-md text-sm py-2">
-                  <Settings size={16} className="mr-1.5" /> Edit Profile
+                <Button variant="secondary" className="rounded-full text-sm py-2 px-4">
+                  <Settings size={15} className="mr-1.5" /> Edit Profile
                 </Button>
               </Link>
             ) : (
@@ -156,47 +159,47 @@ export const Profile = () => {
                 isLoading={isFollowLoading && followStatus !== 'requested'}
                 disabled={followStatus === 'requested'}
                 variant={followStatus !== 'none' ? 'secondary' : 'primary'}
-                className={`rounded-full shadow-lg text-sm py-2 ${followStatus === 'requested' ? 'opacity-60 cursor-not-allowed' : ''}`}
+                className={`rounded-full text-sm py-2 px-4 ${followStatus === 'requested' ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
-                {followStatus === 'none' && <><UserPlus size={16} className="mr-1.5" /> Follow</>}
-                {followStatus === 'requested' && <><UserCheck size={16} className="mr-1.5" /> Requested</>}
-                {followStatus === 'following' && <><UserMinus size={16} className="mr-1.5" /> Unfollow</>}
+                {followStatus === 'none' && <><UserPlus size={15} className="mr-1.5" /> Follow</>}
+                {followStatus === 'requested' && <><UserCheck size={15} className="mr-1.5" /> Requested</>}
+                {followStatus === 'following' && <><UserMinus size={15} className="mr-1.5" /> Unfollow</>}
               </Button>
             )}
           </div>
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mt-3"
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="mt-4"
         >
-          <h1 className="text-2xl sm:text-3xl font-bold text-white">{profileUser.name}</h1>
-          <p className="text-slate-400 font-medium text-sm sm:text-base">@{profileUser.email.split('@')[0]}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight">{profileUser.name}</h1>
+          <p className="text-text-tertiary font-medium text-sm mt-0.5">@{profileUser.email.split('@')[0]}</p>
           
-          <div className="mt-3 flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-slate-400">
-            <div className="flex items-center"><MapPin size={14} className="mr-1" /> {profileUser.location || 'Unknown Location'}</div>
-            <div className="flex items-center"><LinkIcon size={14} className="mr-1 text-primary-400" /> <span className="text-primary-400 cursor-pointer hover:underline">pluse.app/{profileUser.email.split('@')[0]}</span></div>
-            <div className="flex items-center"><Calendar size={14} className="mr-1" /> Joined {new Date(profileUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
+          <div className="mt-3 flex flex-wrap gap-3 text-xs text-text-tertiary">
+            <div className="flex items-center"><MapPin size={13} className="mr-1" /> {profileUser.location || 'Unknown Location'}</div>
+            <div className="flex items-center"><LinkIcon size={13} className="mr-1 text-accent-400" /> <span className="text-accent-400 cursor-pointer hover:underline">pluse.app/{profileUser.email.split('@')[0]}</span></div>
+            <div className="flex items-center"><Calendar size={13} className="mr-1" /> Joined {new Date(profileUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
           </div>
 
-          <div className="mt-6 flex gap-6 border-b border-white/10 pb-6">
+          <div className="mt-5 flex gap-4 border-b border-border-subtle pb-5">
             <button
               className="follow-stat-btn"
               onClick={() => setFollowModal({ open: true, mode: 'following' })}
               aria-label="View following"
             >
-              <span className="text-2xl font-bold text-white">{profileUser.following}</span>
-              <span className="text-sm text-slate-400 uppercase tracking-wider font-medium">Following</span>
+              <span className="text-xl font-bold text-text-primary">{profileUser.following}</span>
+              <span className="text-xs text-text-tertiary uppercase tracking-wider font-medium">Following</span>
             </button>
             <button
               className="follow-stat-btn"
               onClick={() => setFollowModal({ open: true, mode: 'followers' })}
               aria-label="View followers"
             >
-              <span className="text-2xl font-bold text-white">{profileUser.follower}</span>
-              <span className="text-sm text-slate-400 uppercase tracking-wider font-medium">Followers</span>
+              <span className="text-xl font-bold text-text-primary">{profileUser.follower}</span>
+              <span className="text-xs text-text-tertiary uppercase tracking-wider font-medium">Followers</span>
             </button>
           </div>
         </motion.div>
@@ -204,19 +207,21 @@ export const Profile = () => {
 
       {/* User Posts Feed */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mt-8 px-4 sm:px-0"
+        transition={{ delay: 0.3, duration: 0.4 }}
+        className="mt-6"
       >
-        <h2 className="text-xl font-bold text-white mb-6 tracking-tight">{isOwnProfile ? 'Your Recent Posts' : 'Recent Posts'}</h2>
-        {userPosts.length > 0 ? (
-          userPosts.map(post => <PostCard key={post._id} post={post} />)
-        ) : (
-          <div className="text-center py-12 bg-white/5 rounded-3xl border border-white/5">
-            <p className="text-slate-400">{isOwnProfile ? "You haven't posted anything yet." : "No posts yet."}</p>
-          </div>
-        )}
+        <h2 className="text-lg font-bold text-text-primary mb-4 px-4 tracking-tight">{isOwnProfile ? 'Your Recent Posts' : 'Recent Posts'}</h2>
+        <div className="border-t border-border-subtle">
+          {userPosts.length > 0 ? (
+            userPosts.map(post => <PostCard key={post._id} post={post} />)
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-text-tertiary text-sm">{isOwnProfile ? "You haven't posted anything yet." : "No posts yet."}</p>
+            </div>
+          )}
+        </div>
       </motion.div>
 
       {/* Followers / Following Modal */}

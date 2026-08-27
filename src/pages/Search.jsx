@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search as SearchIcon, UserPlus, ArrowRight, Loader2 } from 'lucide-react';
+import { Search as SearchIcon, ArrowRight, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { searchUsers } from '../services/api';
 
@@ -38,80 +38,83 @@ export const Search = () => {
   }, [query]);
 
   return (
-    <div className="max-w-2xl mx-auto relative z-10 pb-20">
+    <div className="max-w-full mx-auto relative z-10 pb-20">
+      {/* Header */}
       <motion.div 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="sticky top-0 z-20 bg-[#030303]/60 backdrop-blur-xl pb-3 pt-3 mb-6 border-b border-white/5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="px-4 pt-2 pb-4 mb-4"
       >
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center">
-          Search Users <SearchIcon className="ml-2 text-primary-400" size={18} />
+        <h2 className="text-xl font-bold tracking-tight text-text-primary flex items-center gap-2">
+          Search Users <SearchIcon className="text-accent-400" size={18} />
         </h2>
       </motion.div>
 
+      {/* Search Input */}
       <motion.div 
-        initial={{ y: 20, opacity: 0 }}
+        initial={{ y: 8, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        className="relative mb-8"
+        transition={{ delay: 0.05 }}
+        className="relative mx-4 mb-6"
       >
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <SearchIcon className="h-5 w-5 text-slate-400" />
+          <SearchIcon className="h-5 w-5 text-text-muted" />
         </div>
         <input
           type="text"
-          className="block w-full pl-11 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all shadow-lg"
+          className="block w-full pl-11 pr-4 py-3.5 bg-bg-secondary border border-border-default rounded-xl text-text-primary placeholder-text-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(99,102,241,0.1)] transition-all text-sm"
           placeholder="Search by name..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         {isLoading && (
           <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
-            <Loader2 className="h-5 w-5 text-primary-400 animate-spin" />
+            <div className="w-5 h-5 border-2 border-accent-500/30 border-t-accent-500 rounded-full animate-spin" />
           </div>
         )}
       </motion.div>
 
-      {error && <div className="text-red-400 mb-4">{error}</div>}
+      {error && <div className="text-danger mb-4 text-sm px-4">{error}</div>}
 
-      <div className="space-y-3">
+      {/* Results */}
+      <div className="border-t border-border-subtle">
         <AnimatePresence mode="popLayout">
           {query.trim() && !isLoading && results.length === 0 ? (
             <motion.div
               key="no-results"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="text-center py-12 bg-white/5 rounded-2xl border border-white/10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-12"
             >
-              <p className="text-slate-400">No users found for "{query}"</p>
+              <p className="text-text-tertiary text-sm">No users found for "{query}"</p>
             </motion.div>
           ) : (
             results.map((user, index) => (
               <motion.div
                 key={user._id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ delay: index * 0.05 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: index * 0.03 }}
               >
                 <Link 
                   to={`/profile/${user._id}`}
-                  className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all group"
+                  className="flex items-center justify-between px-4 py-3.5 hover:bg-bg-secondary/50 border-b border-border-subtle transition-colors group"
                 >
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3">
                     <img 
                       src={user.profileImage} 
                       alt={user.name} 
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-white/10 group-hover:ring-primary-500/50 transition-all"
+                      className="w-10 h-10 rounded-full object-cover ring-2 ring-border-subtle group-hover:ring-accent-500/30 transition-all"
                     />
                     <div>
-                      <h3 className="text-white font-semibold group-hover:text-primary-400 transition-colors">{user.name}</h3>
-                      <p className="text-sm text-slate-400">@{user.email.split('@')[0]}</p>
+                      <h3 className="text-text-primary font-semibold text-sm group-hover:text-accent-400 transition-colors">{user.name}</h3>
+                      <p className="text-xs text-text-tertiary">@{user.email.split('@')[0]}</p>
                     </div>
                   </div>
-                  <div className="text-slate-500 group-hover:text-primary-400 transition-colors">
-                    <ArrowRight size={20} />
+                  <div className="text-text-muted group-hover:text-accent-400 transition-colors">
+                    <ArrowRight size={18} />
                   </div>
                 </Link>
               </motion.div>

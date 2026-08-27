@@ -80,66 +80,68 @@ export const Settings = () => {
     }
   };
 
+  const inputClasses = "w-full bg-bg-secondary border border-border-default rounded-xl py-3 px-4 text-text-primary focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(99,102,241,0.1)] transition-all text-sm";
+
   return (
     <div className="max-w-2xl mx-auto relative z-10 pb-20">
-      <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6 sm:mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Settings</h2>
-        <p className="text-slate-400 mt-1 sm:mt-2 text-sm sm:text-base">Manage your account preferences and settings.</p>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 px-4">
+        <h2 className="text-2xl font-bold text-text-primary tracking-tight">Settings</h2>
+        <p className="text-text-tertiary mt-1 text-sm">Manage your account preferences and settings.</p>
       </motion.div>
 
       {/* Role-Based UI: Admin Dashboard */}
       {user.role === 'admin' && (
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-gradient-to-br from-primary-900/40 to-accent-900/20 backdrop-blur-xl p-6 rounded-3xl border border-primary-500/30 mb-8 shadow-[0_0_30px_rgba(139,92,246,0.15)] relative overflow-hidden"
+          className="bg-accent-500/[0.06] p-6 mx-4 rounded-xl border border-accent-500/15 mb-6 relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <Shield size={100} />
+          <div className="absolute top-0 right-0 p-4 opacity-[0.06]">
+            <Shield size={80} />
           </div>
-          <div className="flex items-center space-x-3 mb-4 relative z-10">
-            <div className="bg-primary-500/20 p-2 rounded-xl text-primary-400">
-              <Shield size={24} />
+          <div className="flex items-center space-x-3 mb-3 relative z-10">
+            <div className="bg-accent-500/15 p-2 rounded-xl text-accent-400">
+              <Shield size={20} />
             </div>
-            <h3 className="text-xl font-bold text-white">Admin Dashboard</h3>
+            <h3 className="text-lg font-bold text-text-primary">Admin Dashboard</h3>
           </div>
-          <p className="text-slate-300 mb-6 relative z-10">You have administrator privileges. You can manage platform users, view analytics, and moderate content.</p>
-          <div className="flex space-x-3 relative z-10">
-            <Button className="bg-primary-500 hover:bg-primary-600 text-white">Manage Users</Button>
-            <Button variant="secondary">View Analytics</Button>
+          <p className="text-text-secondary text-sm mb-5 relative z-10">You have administrator privileges. Manage platform users, view analytics, and moderate content.</p>
+          <div className="flex space-x-2.5 relative z-10">
+            <Button className="text-sm">Manage Users</Button>
+            <Button variant="secondary" className="text-sm">View Analytics</Button>
           </div>
         </motion.div>
       )}
 
-      {/* General Settings */}
+      {/* General Settings — Public Profile */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-white/5 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-xl"
+        transition={{ delay: 0.15 }}
+        className="bg-bg-tertiary p-6 mx-4 rounded-xl border border-border-default"
       >
-        <div className="flex items-center space-x-3 mb-6 border-b border-white/10 pb-4">
-          <User className="text-primary-400" size={24} />
-          <h3 className="text-xl font-bold text-white">Public Profile</h3>
+        <div className="flex items-center space-x-3 mb-5 border-b border-border-subtle pb-4">
+          <User className="text-accent-400" size={20} />
+          <h3 className="text-lg font-bold text-text-primary">Public Profile</h3>
         </div>
 
         {successMsg && (
-          <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-3 rounded-xl mb-6 text-sm">
+          <div className="bg-success/10 border border-success/20 text-success p-3 rounded-xl mb-5 text-sm font-medium">
             {successMsg}
           </div>
         )}
 
-        <form onSubmit={handleUpdate} className="space-y-5 sm:space-y-6">
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+        <form onSubmit={handleUpdate} className="space-y-5">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="relative">
               <img 
                 src={photoPreview} 
                 alt="Profile" 
-                className="w-24 h-24 rounded-full object-cover border-4 border-white/10 bg-black/50"
+                className="w-20 h-20 rounded-full object-cover border-2 border-border-default bg-bg-secondary"
               />
-              <label className="absolute bottom-0 right-0 bg-primary-500 hover:bg-primary-600 text-white p-2 rounded-full cursor-pointer transition-colors shadow-lg">
-                <User size={16} />
+              <label className="absolute bottom-0 right-0 bg-accent-500 hover:bg-accent-600 text-white p-1.5 rounded-full cursor-pointer transition-colors shadow-md">
+                <User size={14} />
                 <input 
                   type="file" 
                   className="hidden" 
@@ -154,43 +156,43 @@ export const Settings = () => {
               </label>
             </div>
             <div>
-              <h4 className="text-white font-medium">Profile Picture</h4>
-              <p className="text-sm text-slate-400 mt-1">Upload a new avatar (JPEG, PNG).</p>
+              <h4 className="text-text-primary font-medium text-sm">Profile Picture</h4>
+              <p className="text-xs text-text-tertiary mt-0.5">Upload a new avatar (JPEG, PNG).</p>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Display Name</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">Display Name</label>
             <input 
               type="text" 
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-primary-500/50 transition-colors"
+              className={inputClasses}
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Location</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">Location</label>
             <input 
               type="text" 
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="e.g. San Francisco, CA"
-              className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-primary-500/50 transition-colors"
+              className={inputClasses}
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Email Address (Cannot be changed)</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">Email Address (Cannot be changed)</label>
             <input 
               type="email" 
               value={user.email}
               disabled
-              className="w-full bg-black/40 border border-white/5 rounded-xl py-3 px-4 text-slate-500 cursor-not-allowed"
+              className="w-full bg-bg-primary border border-border-subtle rounded-xl py-3 px-4 text-text-muted cursor-not-allowed text-sm"
             />
           </div>
 
-          <div className="pt-4 flex justify-end">
+          <div className="pt-3 flex justify-end">
             <Button type="submit" isLoading={isUpdating}>
               Save Changes
             </Button>
@@ -198,47 +200,52 @@ export const Settings = () => {
         </form>
       </motion.div>
       
-      {/* Placeholder Sections */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-8 bg-white/5 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 opacity-70">
-        <div className="flex items-center space-x-3 mb-6 border-b border-white/10 pb-4">
-          <Lock className="text-slate-400" size={24} />
-          <h3 className="text-xl font-bold text-white">Security</h3>
+      {/* Security Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 8 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ delay: 0.25 }} 
+        className="mt-4 bg-bg-tertiary p-6 mx-4 rounded-xl border border-border-default"
+      >
+        <div className="flex items-center space-x-3 mb-5 border-b border-border-subtle pb-4">
+          <Lock className="text-text-tertiary" size={20} />
+          <h3 className="text-lg font-bold text-text-primary">Security</h3>
         </div>
-        <p className="text-slate-400 mb-4">Update your password and secure your account.</p>
+        <p className="text-text-tertiary text-sm mb-4">Update your password and secure your account.</p>
         {passwordMsg.text && (
-          <div className={`p-3 rounded-xl mb-6 text-sm ${passwordMsg.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+          <div className={`p-3 rounded-xl mb-5 text-sm font-medium ${passwordMsg.type === 'success' ? 'bg-success/10 border border-success/20 text-success' : 'bg-danger/10 border border-danger/20 text-danger'}`}>
             {passwordMsg.text}
           </div>
         )}
         <form onSubmit={handlePasswordUpdate} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Current Password</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">Current Password</label>
             <input 
               type="password" 
               required
               value={passwordCurrent}
               onChange={(e) => setPasswordCurrent(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-primary-500/50 transition-colors"
+              className={inputClasses}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">New Password</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">New Password</label>
             <input 
               type="password" 
               required
               value={passwordNew}
               onChange={(e) => setPasswordNew(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-primary-500/50 transition-colors"
+              className={inputClasses}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Confirm New Password</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">Confirm New Password</label>
             <input 
               type="password" 
               required
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-primary-500/50 transition-colors"
+              className={inputClasses}
             />
           </div>
           <div className="pt-2 flex justify-end">
@@ -247,14 +254,14 @@ export const Settings = () => {
         </form>
 
         {/* 2FA Toggle */}
-        <div className="mt-8 pt-6 border-t border-white/10">
+        <div className="mt-6 pt-5 border-t border-border-subtle">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="text-white font-semibold flex items-center gap-2">
-                <Shield size={18} className="text-primary-400" />
+              <h4 className="text-text-primary font-semibold text-sm flex items-center gap-2">
+                <Shield size={16} className="text-accent-400" />
                 Two-Factor Authentication
               </h4>
-              <p className="text-slate-400 text-sm mt-1">
+              <p className="text-text-tertiary text-sm mt-1">
                 {twoFactorEnabled
                   ? '2FA is active. Your account is extra secure.'
                   : 'Add an extra layer of security to your account.'}
@@ -264,22 +271,22 @@ export const Settings = () => {
               id="toggle-2fa-btn"
               onClick={handleToggle2FA}
               disabled={isToggling2FA}
-              className={`relative w-14 h-7 rounded-full transition-all duration-300 focus:outline-none ${
+              className={`relative w-12 h-6 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
                 twoFactorEnabled
-                  ? 'bg-gradient-to-r from-primary-600 to-accent-500 shadow-[0_0_12px_rgba(139,92,246,0.4)]'
-                  : 'bg-white/10'
+                  ? 'bg-accent-500'
+                  : 'bg-bg-elevated border border-border-default'
               }`}
             >
               <span
-                className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-300 ${
-                  twoFactorEnabled ? 'translate-x-7' : 'translate-x-0'
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${
+                  twoFactorEnabled ? 'translate-x-6' : 'translate-x-0'
                 }`}
               />
             </button>
           </div>
           {twoFAMsg && (
-            <p className={`mt-3 text-sm ${
-              twoFAMsg.type === 'success' ? 'text-green-400' : 'text-red-400'
+            <p className={`mt-3 text-sm font-medium ${
+              twoFAMsg.type === 'success' ? 'text-success' : 'text-danger'
             }`}>
               {twoFAMsg.text}
             </p>

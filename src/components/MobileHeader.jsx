@@ -38,59 +38,49 @@ export const MobileHeader = () => {
     <motion.header
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+      transition={{ type: 'spring', stiffness: 280, damping: 26 }}
       className="md:hidden fixed top-0 left-0 right-0 z-30 h-14 flex items-center justify-between px-4
-                 bg-[#030303]/80 backdrop-blur-xl border-b border-white/5 shadow-lg"
+                 bg-bg-primary/90 backdrop-blur-xl border-b border-border-subtle"
     >
       {/* Hamburger */}
       <button
         onClick={toggle}
         aria-label="Open menu"
-        className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/8 active:bg-white/12 transition-all"
+        className="p-2 rounded-xl text-text-tertiary hover:text-text-primary hover:bg-bg-elevated active:bg-bg-elevated/80 transition-all"
       >
-        <Menu size={22} />
+        <Menu size={20} />
       </button>
 
       {/* Logo / Brand */}
       <Link to="/" className="flex items-center gap-1.5 select-none">
-        <img
-          src="/logo.png"
-          alt="Pluse"
-          className="h-7 w-auto"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'block';
-          }}
-        />
-        <span
-          className="hidden text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400 tracking-tight"
-        >
-          PLUSE
+        <span className="text-lg font-extrabold text-text-primary tracking-tight">
+          Pluse
         </span>
+        <span className="w-1.5 h-1.5 rounded-full bg-accent-500 mt-0.5" />
       </Link>
 
       {/* Avatar / Bell */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
         {user ? (
           <>
-            <Link to="/notifications" aria-label="Notifications" className="relative p-1.5 text-slate-300 hover:text-white transition-colors">
-              <Bell size={22} />
+            <Link to="/notifications" aria-label="Notifications" className="relative p-2 text-text-tertiary hover:text-text-primary hover:bg-bg-elevated rounded-xl transition-all">
+              <Bell size={20} />
               {hasUnread && (
-                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a1a] z-20 animate-pulse"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full z-20" style={{ animation: 'subtlePulse 2s infinite' }} />
               )}
             </Link>
             <Link to="/profile" aria-label="My profile">
               <img
                 src={user.profileImage}
                 alt={user.name}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10 hover:ring-primary-500/60 transition-all"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-border-default hover:ring-accent-500/50 transition-all"
               />
             </Link>
           </>
         ) : (
           <Link
             to="/login"
-            className="text-sm font-semibold text-primary-400 hover:text-primary-300 transition-colors px-3 py-1.5 rounded-xl bg-primary-500/10 hover:bg-primary-500/20"
+            className="text-sm font-semibold text-accent-400 hover:text-accent-300 transition-colors px-3 py-1.5 rounded-xl bg-accent-500/10 hover:bg-accent-500/15"
           >
             Log In
           </Link>

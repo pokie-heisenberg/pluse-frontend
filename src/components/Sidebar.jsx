@@ -56,63 +56,56 @@ export const Sidebar = () => {
   ];
 
   const sidebarContent = (
-    <div className="flex flex-col h-full pt-8 pb-6 px-4">
+    <div className="flex flex-col h-full pt-8 pb-6 px-5">
       {/* Logo */}
-      <div className="flex flex-col items-center justify-center px-4 mb-12 relative group cursor-pointer">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full scale-50" />
-        <img
-          src="/logo.png"
-          alt="Pluse"
-          className="w-32 h-auto relative z-10 drop-shadow-2xl hover:scale-105 transition-transform duration-300"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        <div className="hidden flex-col items-center relative z-10">
-          <div className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-primary-400 via-primary-500 to-accent-400 tracking-tighter">
-            P<span className="text-primary-500 inline-block translate-x-[-15px]">+</span>
-          </div>
-          <h1 className="text-xl font-bold tracking-[0.3em] mt-2 text-white">PLUSE</h1>
+      <div className="px-4 mb-10">
+        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => navigate('/')}>
+          <span className="text-2xl font-extrabold text-text-primary tracking-tight">
+            Pluse
+          </span>
+          <span className="w-2 h-2 rounded-full bg-accent-500 group-hover:bg-accent-400 transition-colors mt-1" />
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-3">
+      <nav className="flex-1 space-y-1">
         {navItems.map((item, i) => (
           <motion.div
             key={item.label}
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.05 + i * 0.07 }}
+            transition={{ delay: 0.04 + i * 0.06, duration: 0.35 }}
           >
             <NavLink
               to={item.path}
               className={({ isActive }) => `
-                relative flex items-center space-x-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group overflow-hidden
-                ${isActive ? 'text-white' : 'text-slate-400 hover:text-white'}
+                relative flex items-center space-x-3.5 px-4 py-3 rounded-xl transition-all duration-200 group overflow-hidden
+                ${isActive 
+                  ? 'bg-accent-500/10 text-text-primary' 
+                  : 'text-text-tertiary hover:text-text-primary hover:bg-bg-elevated'
+                }
               `}
             >
               {({ isActive }) => (
                 <>
+                  {/* Left accent bar for active state */}
                   {isActive && (
                     <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-accent-500/10 border border-white/10 rounded-2xl"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      layoutId="activeNavBar"
+                      className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r-full bg-accent-500"
+                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
                   <div className="relative">
                     <item.icon
-                      size={22}
-                      className={`relative z-10 transition-transform duration-300 group-hover:scale-110 ${isActive ? 'text-primary-400' : ''}`}
+                      size={20}
+                      className={`transition-colors duration-200 ${isActive ? 'text-accent-400' : ''}`}
                     />
                     {item.label === 'Notifications' && hasUnread && !isActive && (
-                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a1a] z-20 animate-pulse" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-danger rounded-full z-20" style={{ animation: 'subtlePulse 2s infinite' }} />
                     )}
                   </div>
-                  <span className="relative z-10 font-medium tracking-wide">{item.label}</span>
+                  <span className="font-medium text-[14.5px] tracking-wide">{item.label}</span>
                 </>
               )}
             </NavLink>
@@ -120,46 +113,49 @@ export const Sidebar = () => {
         ))}
       </nav>
 
+      {/* Divider */}
+      <div className="h-px bg-border-subtle mx-2 my-2" />
+
       {/* User / Auth */}
       {user ? (
         <motion.div
           onClick={handleLogout}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-auto border-t border-white/10 pt-6 flex items-center px-4 hover:bg-red-500/10 p-3 rounded-2xl cursor-pointer transition-all group"
+          transition={{ delay: 0.5 }}
+          className="flex items-center px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 group hover:bg-danger/[0.06]"
           title="Click to logout"
         >
           <div className="relative">
             <img
               src={user.profileImage}
               alt="Profile"
-              className="w-11 h-11 rounded-full mr-3 object-cover ring-2 ring-white/10 group-hover:ring-red-500/50 transition-all"
+              className="w-10 h-10 rounded-full mr-3 object-cover ring-2 ring-border-default group-hover:ring-danger/40 transition-all"
             />
-            <div className="absolute bottom-0 right-3 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0a0a0a]" />
+            <div className="absolute bottom-0 right-3 w-2.5 h-2.5 bg-success rounded-full border-2 border-bg-primary" />
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="font-semibold text-sm text-white truncate group-hover:text-red-400 transition-colors">{user.name}</p>
-            <p className="text-xs text-slate-400 truncate mt-0.5 group-hover:text-red-400/70 transition-colors">{user.email}</p>
+            <p className="font-semibold text-sm text-text-primary truncate group-hover:text-danger transition-colors">{user.name}</p>
+            <p className="text-xs text-text-tertiary truncate mt-0.5 group-hover:text-danger/60 transition-colors">{user.email}</p>
           </div>
-          <LogOut size={18} className="text-slate-500 group-hover:text-red-400 transition-colors" />
+          <LogOut size={16} className="text-text-muted group-hover:text-danger transition-colors" />
         </motion.div>
       ) : (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-auto border-t border-white/10 pt-6 flex flex-col space-y-3 px-2"
+          transition={{ delay: 0.5 }}
+          className="flex flex-col space-y-2.5 px-2"
         >
           <button
             onClick={() => { close(); navigate('/login'); }}
-            className="w-full py-2.5 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-primary-500/20"
+            className="w-full py-2.5 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-accent-500/20 text-sm"
           >
             Log In
           </button>
           <button
             onClick={() => { close(); navigate('/signup'); }}
-            className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl transition-colors border border-white/10"
+            className="w-full py-2.5 bg-bg-elevated hover:bg-bg-elevated/80 text-text-primary font-semibold rounded-xl transition-colors border border-border-default text-sm"
           >
             Sign Up
           </button>
@@ -171,7 +167,7 @@ export const Sidebar = () => {
   return (
     <>
       {/* ── Desktop sidebar (always visible ≥ md) ─────────────────────── */}
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-surface-dark/40 backdrop-blur-xl border-r border-white/5 hidden md:flex flex-col z-50 shadow-2xl">
+      <aside className="fixed left-0 top-0 h-screen w-[280px] bg-bg-tertiary border-r border-border-subtle hidden md:flex flex-col z-50">
         {sidebarContent}
       </aside>
 
@@ -183,7 +179,7 @@ export const Sidebar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
             onClick={close}
           />
@@ -198,16 +194,16 @@ export const Sidebar = () => {
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
-            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-            className="fixed left-0 top-0 h-screen w-72 bg-[#0a0a0f]/95 backdrop-blur-2xl border-r border-white/8 flex flex-col z-50 shadow-[4px_0_40px_rgba(0,0,0,0.6)] md:hidden"
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed left-0 top-0 h-screen w-[280px] bg-bg-tertiary border-r border-border-subtle flex flex-col z-50 shadow-[4px_0_40px_rgba(0,0,0,0.6)] md:hidden"
           >
             {/* Close button */}
             <button
               onClick={close}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all z-10"
+              className="absolute top-4 right-4 p-2 rounded-xl bg-bg-elevated hover:bg-bg-elevated/80 text-text-tertiary hover:text-text-primary transition-all z-10"
               aria-label="Close menu"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
             {sidebarContent}
           </motion.aside>

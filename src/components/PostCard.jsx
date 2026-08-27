@@ -96,13 +96,13 @@ const CommentItem = ({ comment, postId, user }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-1.5">
       <div className="flex space-x-3">
-        <img src={comment.author.profileImage} alt={comment.author.name} className="w-8 h-8 rounded-full object-cover mt-1" />
-        <div className="flex-1 bg-white/5 p-3 rounded-2xl rounded-tl-sm">
+        <img src={comment.author.profileImage} alt={comment.author.name} className="w-8 h-8 rounded-full object-cover mt-0.5 ring-1 ring-border-subtle" />
+        <div className="flex-1 bg-bg-elevated p-3 rounded-xl rounded-tl-sm">
           <div className="flex justify-between items-baseline mb-1">
-            <span className="font-semibold text-sm text-white">{comment.author.name}</span>
-            <span className="text-[10px] text-slate-500 uppercase tracking-wider">{new Date(comment.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            <span className="font-semibold text-sm text-text-primary">{comment.author.name}</span>
+            <span className="font-mono text-[10px] text-text-muted uppercase tracking-wider">{new Date(comment.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
           </div>
           {isEditing ? (
             <div className="mt-2">
@@ -110,30 +110,30 @@ const CommentItem = ({ comment, postId, user }) => {
                 type="text" 
                 value={editContent} 
                 onChange={(e) => setEditContent(e.target.value)} 
-                className="w-full bg-white/10 border border-white/20 rounded-md py-1 px-2 text-xs text-white focus:outline-none focus:border-primary-500"
+                className="w-full bg-bg-secondary border border-border-default rounded-lg py-1.5 px-2.5 text-xs text-text-primary focus:outline-none focus:border-accent-500/50 transition-colors"
               />
               <div className="flex space-x-2 mt-2">
-                <button onClick={handleEdit} className="text-[10px] bg-primary-500 text-white px-2 py-1 rounded">Save</button>
-                <button onClick={() => setIsEditing(false)} className="text-[10px] bg-white/10 text-white px-2 py-1 rounded">Cancel</button>
+                <button onClick={handleEdit} className="text-[10px] bg-accent-500 text-white px-2.5 py-1 rounded-md font-medium">Save</button>
+                <button onClick={() => setIsEditing(false)} className="text-[10px] bg-bg-elevated text-text-secondary px-2.5 py-1 rounded-md">Cancel</button>
               </div>
             </div>
           ) : (
-            <p className="text-sm text-slate-300">{comment.content}</p>
+            <p className="text-sm text-text-secondary leading-relaxed">{comment.content}</p>
           )}
         </div>
       </div>
-      <div className="flex justify-start pl-11 space-x-4 items-center mt-1">
-        <button onClick={handleLike} className={`text-xs flex items-center space-x-1 ${isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-white'}`}>
-          <Heart size={12} className={isLiked ? "fill-rose-500" : ""} />
+      <div className="flex justify-start pl-11 space-x-4 items-center">
+        <button onClick={handleLike} className={`text-xs flex items-center space-x-1 transition-colors ${isLiked ? 'text-danger' : 'text-text-muted hover:text-text-primary'}`}>
+          <Heart size={12} className={isLiked ? "fill-danger" : ""} />
           <span>{likes > 0 ? likes : ''}</span>
         </button>
-        <button onClick={handleToggleReplies} className="text-xs text-primary-400 hover:text-primary-300 transition-colors">
+        <button onClick={handleToggleReplies} className="text-xs text-accent-400 hover:text-accent-300 transition-colors">
           {showReplies ? "Hide Replies" : "Reply"}
         </button>
         {user && user._id === comment.author._id && (
           <>
-            <button onClick={() => setIsEditing(!isEditing)} className="text-xs text-slate-400 hover:text-white">Edit</button>
-            <button onClick={handleDelete} className="text-xs text-slate-400 hover:text-rose-500">Delete</button>
+            <button onClick={() => setIsEditing(!isEditing)} className="text-xs text-text-muted hover:text-text-primary transition-colors">Edit</button>
+            <button onClick={handleDelete} className="text-xs text-text-muted hover:text-danger transition-colors">Delete</button>
           </>
         )}
       </div>
@@ -144,24 +144,24 @@ const CommentItem = ({ comment, postId, user }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="pl-11 space-y-3 mt-2 border-l-2 border-white/10 ml-4 overflow-hidden"
+            className="pl-11 space-y-3 mt-1 border-l-2 border-border-subtle ml-4 overflow-hidden"
           >
             {isLoadingReplies ? (
-               <div className="w-4 h-4 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+               <div className="w-4 h-4 border-2 border-accent-500/30 border-t-accent-500 rounded-full animate-spin"></div>
             ) : replies.map(reply => (
                <div key={reply._id} className="mb-2">
                  <div className="flex space-x-2">
-                   <img src={reply.author?.profileImage || 'https://i.pravatar.cc/150'} alt={reply.author?.name} className="w-6 h-6 rounded-full object-cover mt-1" />
-                   <div className="flex-1 bg-white/5 p-2 rounded-xl rounded-tl-sm">
+                   <img src={reply.author?.profileImage || 'https://i.pravatar.cc/150'} alt={reply.author?.name} className="w-6 h-6 rounded-full object-cover mt-0.5 ring-1 ring-border-subtle" />
+                   <div className="flex-1 bg-bg-elevated p-2.5 rounded-xl rounded-tl-sm">
                      <div className="flex justify-between items-baseline mb-1">
-                       <span className="font-semibold text-xs text-white">{reply.author?.name || 'User'}</span>
-                       {reply.createdAt && <span className="text-[10px] text-slate-500 uppercase tracking-wider">{new Date(reply.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>}
+                       <span className="font-semibold text-xs text-text-primary">{reply.author?.name || 'User'}</span>
+                       {reply.createdAt && <span className="font-mono text-[10px] text-text-muted uppercase tracking-wider">{new Date(reply.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>}
                      </div>
-                     <p className="text-xs text-slate-300">{reply.content}</p>
+                     <p className="text-xs text-text-secondary">{reply.content}</p>
                    </div>
                  </div>
                  <div className="flex justify-start pl-9 space-x-3 mt-0.5">
-                   <button onClick={() => handleReplyTag(reply.author?.name)} className="text-[10px] text-slate-500 hover:text-white transition-colors">
+                   <button onClick={() => handleReplyTag(reply.author?.name)} className="text-[10px] text-text-muted hover:text-text-primary transition-colors">
                      Reply
                    </button>
                  </div>
@@ -175,12 +175,12 @@ const CommentItem = ({ comment, postId, user }) => {
                 value={newReply}
                 onChange={(e) => setNewReply(e.target.value)}
                 placeholder="Write a reply..."
-                className="flex-1 bg-white/5 border border-white/10 rounded-full py-1.5 px-3 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-primary-500/50"
+                className="flex-1 bg-bg-secondary border border-border-default rounded-full py-1.5 px-3 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-500/50 transition-colors"
               />
               <button 
                 type="submit" 
                 disabled={!newReply.trim() || isSubmittingReply}
-                className="p-1.5 bg-primary-500 text-white rounded-full hover:bg-primary-600 disabled:opacity-50"
+                className="p-1.5 bg-accent-500 text-white rounded-full hover:bg-accent-600 disabled:opacity-50 transition-colors"
               >
                 <Send size={12} />
               </button>
@@ -392,29 +392,26 @@ export const PostCard = ({ post }) => {
   return (
     <motion.article 
       layout
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      className="bg-white/5 backdrop-blur-lg p-6 rounded-3xl shadow-2xl border border-white/10 mb-8 hover:bg-white/[0.07] hover:border-white/20 transition-all duration-300 group"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className="px-4 py-4 border-b border-border-subtle hover:bg-bg-secondary/50 transition-colors duration-200 group"
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-5">
+      <div className="flex justify-between items-start mb-3">
         <div 
-          className="flex items-center space-x-4 cursor-pointer"
+          className="flex items-center space-x-3 cursor-pointer"
           onClick={() => navigate(`/profile/${post.author._id}`)}
         >
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full blur opacity-40 group-hover:opacity-70 transition-opacity"></div>
-            <img 
-              src={post.author.profileImage} 
-              alt={post.author.name} 
-              className="w-12 h-12 rounded-full object-cover relative z-10 ring-2 ring-white/10"
-            />
-          </div>
+          <img 
+            src={post.author.profileImage} 
+            alt={post.author.name} 
+            className="w-10 h-10 rounded-full object-cover ring-2 ring-border-subtle group-hover:ring-accent-500/30 transition-all duration-300"
+          />
           <div>
-            <h3 className="font-bold text-white tracking-wide hover:text-primary-400 transition-colors">{post.author.name}</h3>
-            <p className="text-xs text-slate-400 font-medium tracking-wider uppercase">
+            <h3 className="font-semibold text-text-primary text-[14.5px] tracking-wide hover:text-accent-400 transition-colors">{post.author.name}</h3>
+            <p className="font-mono text-[11px] text-text-muted tracking-wider uppercase">
               {new Date(post.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
             </p>
           </div>
@@ -422,9 +419,9 @@ export const PostCard = ({ post }) => {
         <div className="relative">
           <button 
             onClick={() => setShowMenu(!showMenu)} 
-            className="text-slate-500 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
+            className="text-text-muted hover:text-text-primary transition-colors p-2 rounded-xl hover:bg-bg-elevated"
           >
-            <MoreHorizontal size={20} />
+            <MoreHorizontal size={18} />
           </button>
           
           <AnimatePresence>
@@ -432,45 +429,46 @@ export const PostCard = ({ post }) => {
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)}></div>
                 <motion.div 
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                  initial={{ opacity: 0, scale: 0.95, y: 6 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                  className="absolute right-0 mt-2 w-48 bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 py-1"
+                  exit={{ opacity: 0, scale: 0.95, y: 6 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 mt-1 w-48 bg-bg-tertiary border border-border-default rounded-xl shadow-2xl overflow-hidden z-50 py-1"
                 >
                   {user?._id === post.author._id ? (
                     <>
                       <button 
                         onClick={() => { setShowMenu(false); setIsEditing(true); setEditContent(postContent); setEditMedia(postMedia); setNewMediaFiles([]); }} 
-                        className="w-full text-left px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white flex items-center transition-colors"
+                        className="w-full text-left px-4 py-2.5 text-sm text-text-secondary hover:bg-bg-elevated hover:text-text-primary flex items-center transition-colors"
                       >
-                        <Edit2 size={16} className="mr-3" /> Edit Post
+                        <Edit2 size={15} className="mr-3" /> Edit Post
                       </button>
                       <button 
                         onClick={() => { setShowMenu(false); handleDeletePost(); }} 
                         disabled={isDeleting}
-                        className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 flex items-center transition-colors disabled:opacity-50"
+                        className="w-full text-left px-4 py-2.5 text-sm text-danger hover:bg-danger/10 flex items-center transition-colors disabled:opacity-50"
                       >
-                        <Trash2 size={16} className="mr-3" /> {isDeleting ? 'Deleting...' : 'Delete Post'}
+                        <Trash2 size={15} className="mr-3" /> {isDeleting ? 'Deleting...' : 'Delete Post'}
                       </button>
                     </>
                   ) : (
                     <button 
                       onClick={() => setShowMenu(false)}
-                      className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 flex items-center transition-colors"
+                      className="w-full text-left px-4 py-2.5 text-sm text-danger hover:bg-danger/10 flex items-center transition-colors"
                     >
-                      <Flag size={16} className="mr-3" /> Report Post
+                      <Flag size={15} className="mr-3" /> Report Post
                     </button>
                   )}
-                  <div className="h-px bg-white/10 my-1"></div>
+                  <div className="h-px bg-border-subtle my-1"></div>
                   <button 
                     onClick={() => {
                       navigator.clipboard.writeText(window.location.origin + "/post/" + post._id);
                       toast.success("Link copied to clipboard!");
                       setShowMenu(false);
                     }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white flex items-center transition-colors"
+                    className="w-full text-left px-4 py-2.5 text-sm text-text-secondary hover:bg-bg-elevated hover:text-text-primary flex items-center transition-colors"
                   >
-                    <Link size={16} className="mr-3" /> Copy Link
+                    <Link size={15} className="mr-3" /> Copy Link
                   </button>
                 </motion.div>
               </>
@@ -482,15 +480,15 @@ export const PostCard = ({ post }) => {
       {/* Content */}
       {isEditing ? (
         <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="mb-6 relative"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mb-4"
         >
           <textarea 
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             disabled={isSavingEdit}
-            className="w-full min-h-[100px] bg-black/20 border border-white/20 rounded-xl p-4 text-[15px] text-white leading-relaxed focus:outline-none focus:border-primary-500/50 focus:bg-black/40 transition-all resize-y custom-scrollbar"
+            className="w-full min-h-[100px] bg-bg-secondary border border-border-default rounded-xl p-4 text-[15px] text-text-primary leading-relaxed focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(99,102,241,0.1)] transition-all resize-y"
             placeholder="Edit your post..."
           />
           
@@ -504,17 +502,17 @@ export const PostCard = ({ post }) => {
                   return (
                     <motion.div 
                       key={cleanUrl}
-                      initial={{ opacity: 0, scale: 0.8 }}
+                      initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      className="relative w-24 h-24 rounded-xl overflow-hidden border border-white/20"
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="relative w-24 h-24 rounded-lg overflow-hidden border border-border-default"
                     >
                       <img src={cleanUrl} alt="preview" className="w-full h-full object-cover" />
                       <button 
                         onClick={() => removeEditMedia(idx)}
-                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white hover:bg-red-500 transition-colors z-10"
+                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white hover:bg-danger transition-colors z-10"
                       >
-                        <X size={14} />
+                        <X size={12} />
                       </button>
                     </motion.div>
                   );
@@ -525,10 +523,10 @@ export const PostCard = ({ post }) => {
                   return (
                     <motion.div 
                       key={media.previewUrl}
-                      initial={{ opacity: 0, scale: 0.8 }}
+                      initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      className="relative w-24 h-24 rounded-xl overflow-hidden border border-accent-500/50"
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="relative w-24 h-24 rounded-lg overflow-hidden border border-accent-500/40"
                     >
                       <img 
                         src={media.previewUrl} 
@@ -537,9 +535,9 @@ export const PostCard = ({ post }) => {
                       />
                       <button 
                         onClick={() => removeNewMedia(idx)}
-                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white hover:bg-red-500 transition-colors z-10"
+                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white hover:bg-danger transition-colors z-10"
                       >
-                        <X size={14} />
+                        <X size={12} />
                       </button>
                     </motion.div>
                   );
@@ -560,46 +558,44 @@ export const PostCard = ({ post }) => {
               />
               <button 
                 onClick={() => fileInputRef.current?.click()} 
-                className="p-2 text-primary-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                className="p-2 text-accent-400 hover:text-text-primary hover:bg-bg-elevated rounded-lg transition-all"
                 title="Add Image"
               >
                 <ImageIcon size={18} />
               </button>
             </div>
             <div className="flex space-x-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <button 
                 onClick={() => setIsEditing(false)}
                 disabled={isSavingEdit}
-                className="text-slate-400 hover:text-white hover:bg-white/10 px-3 py-1.5 rounded-lg text-sm"
+                className="text-text-secondary hover:text-text-primary hover:bg-bg-elevated px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center"
               >
-                <X size={16} className="mr-1.5" /> Cancel
-              </Button>
-              <Button 
+                <X size={14} className="mr-1.5" /> Cancel
+              </button>
+              <button 
                 onClick={handleUpdatePost}
                 disabled={isSavingEdit || (!editContent.trim() && editMedia.length === 0 && newMediaFiles.length === 0)}
-                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg shadow-primary-500/20 flex items-center"
+                className="bg-accent-500 hover:bg-accent-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold shadow-lg shadow-accent-500/15 flex items-center disabled:opacity-50 transition-colors"
               >
                 {isSavingEdit ? (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-1.5" />
+                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-1.5" />
                 ) : (
-                  <Check size={16} className="mr-1.5" />
+                  <Check size={14} className="mr-1.5" />
                 )}
                 Save
-              </Button>
+              </button>
             </div>
           </div>
         </motion.div>
       ) : (
-        <p className="text-slate-300 mb-6 text-[15px] leading-relaxed whitespace-pre-wrap">
+        <p className="text-text-secondary mb-4 text-[15px] leading-relaxed whitespace-pre-wrap">
           {postContent}
         </p>
       )}
 
       {/* Media */}
       {postMedia.length > 0 && (
-        <div className={`mb-6 grid gap-2 ${postMedia.length === 1 ? 'grid-cols-1' : postMedia.length === 2 ? 'grid-cols-2' : postMedia.length === 3 ? 'grid-cols-2' : 'grid-cols-2'} rounded-2xl overflow-hidden bg-black/50 border border-white/5 shadow-inner`}>
+        <div className={`mb-4 grid gap-1 ${postMedia.length === 1 ? 'grid-cols-1' : postMedia.length === 2 ? 'grid-cols-2' : postMedia.length === 3 ? 'grid-cols-2' : 'grid-cols-2'} rounded-xl overflow-hidden border border-border-subtle`}>
           {postMedia.map((mediaUrl, idx) => {
             const cleanUrl = mediaUrl.split('#')[0];
             
@@ -611,7 +607,7 @@ export const PostCard = ({ post }) => {
                 <img 
                   src={cleanUrl} 
                   alt={`Post media ${idx + 1}`} 
-                  className="w-full h-full object-cover max-h-[450px] hover:scale-[1.02] transition-transform duration-700 ease-out cursor-pointer"
+                  className="w-full h-full object-cover max-h-[500px] hover:scale-[1.02] transition-transform duration-500 ease-out cursor-pointer"
                 />
               </div>
             );
@@ -620,64 +616,58 @@ export const PostCard = ({ post }) => {
       )}
 
       {/* Actions */}
-      <div className="flex items-center space-x-1 pt-4 border-t border-white/10">
-        <motion.div whileTap={{ scale: 0.8 }}>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+      <div className="flex items-center space-x-1 pt-3">
+        <motion.div whileTap={{ scale: 0.85 }}>
+          <button 
             onClick={handleLike}
             disabled={isLiking}
-            className={`rounded-xl px-4 ${isLiked ? "text-primary-400 hover:text-primary-300" : "text-slate-400 hover:text-white hover:bg-white/10"}`}
+            className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm transition-all duration-200 ${isLiked ? "text-danger" : "text-text-muted hover:text-danger hover:bg-danger/[0.06]"}`}
           >
             <motion.div
-              animate={isLiked ? { scale: [1, 1.5, 1] } : { scale: 1 }}
-              transition={{ duration: 0.4 }}
+              animate={isLiked ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+              transition={{ duration: 0.3 }}
             >
-              <Heart size={20} className={`mr-2.5 ${isLiked ? 'fill-primary-500 drop-shadow-[0_0_8px_rgba(139,92,246,0.8)]' : ''}`} />
+              <Heart size={18} className={isLiked ? 'fill-danger' : ''} />
             </motion.div>
-            <span className="font-semibold">{likes}</span>
-          </Button>
+            <span className="font-medium">{likes}</span>
+          </button>
         </motion.div>
         
-        <Button 
-          variant="ghost" 
-          size="sm" 
+        <button 
           onClick={handleToggleComments}
-          className="rounded-xl px-4 text-slate-400 hover:text-white hover:bg-white/10"
+          className="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm text-text-muted hover:text-accent-400 hover:bg-accent-500/[0.06] transition-all duration-200"
         >
-          <MessageCircle size={20} className="mr-2.5" />
-          <span className="font-semibold">{commentCount}</span>
-        </Button>
+          <MessageCircle size={18} />
+          <span className="font-medium">{commentCount}</span>
+        </button>
         
-        <Button 
-          variant="ghost" 
-          size="sm" 
+        <div className="flex-1" />
+        
+        <button 
           onClick={handleShare}
-          className="rounded-xl px-4 text-slate-400 hover:text-white hover:bg-white/10 ml-auto"
+          className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-bg-elevated transition-all duration-200"
         >
-          <Share2 size={20} />
-        </Button>
+          <Share2 size={18} />
+        </button>
 
         {/* Bookmark Button */}
-        <motion.div whileTap={{ scale: 0.8 }}>
-          <Button
-            variant="ghost"
-            size="sm"
+        <motion.div whileTap={{ scale: 0.85 }}>
+          <button
             onClick={handleBookmark}
             disabled={isBookmarking}
-            className={`rounded-xl px-3 transition-all duration-200 ${isBookmarked ? 'text-accent-400 hover:text-accent-300' : 'text-slate-400 hover:text-white hover:bg-white/10'}`}
+            className={`p-2 rounded-lg transition-all duration-200 ${isBookmarked ? 'text-accent-400' : 'text-text-muted hover:text-accent-400 hover:bg-accent-500/[0.06]'}`}
             title={isBookmarked ? 'Remove bookmark' : 'Bookmark this post'}
           >
             <motion.div
-              animate={isBookmarked ? { scale: [1, 1.4, 1], rotate: [0, -10, 0] } : { scale: 1 }}
-              transition={{ duration: 0.35 }}
+              animate={isBookmarked ? { scale: [1, 1.25, 1], rotate: [0, -12, 0] } : { scale: 1 }}
+              transition={{ duration: 0.3 }}
             >
               <Bookmark
-                size={20}
-                className={isBookmarked ? 'fill-accent-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.7)]' : ''}
+                size={18}
+                className={isBookmarked ? 'fill-accent-400' : ''}
               />
             </motion.div>
-          </Button>
+          </button>
         </motion.div>
       </div>
 
@@ -690,24 +680,24 @@ export const PostCard = ({ post }) => {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="pt-6 border-t border-white/10 mt-4 space-y-4">
+            <div className="pt-4 border-t border-border-subtle mt-3 space-y-4">
               {/* Comment Input */}
-              <div className="flex items-center space-x-3 mb-6">
-                <img src={user?.profileImage || 'https://i.pravatar.cc/150'} alt="You" className="w-9 h-9 rounded-full object-cover" />
+              <div className="flex items-center space-x-3 mb-4">
+                <img src={user?.profileImage || 'https://i.pravatar.cc/150'} alt="You" className="w-8 h-8 rounded-full object-cover ring-1 ring-border-subtle" />
                 <form onSubmit={handleSubmitComment} className="flex-1 relative">
                   <input 
                     type="text" 
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Write a comment..."
-                    className="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-4 pr-12 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-primary-500/50 focus:bg-white/10 transition-all"
+                    className="w-full bg-bg-secondary border border-border-default rounded-full py-2.5 pl-4 pr-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(99,102,241,0.1)] transition-all"
                   />
                   <button 
                     type="submit" 
                     disabled={!newComment.trim() || isSubmittingComment}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-primary-500 text-white rounded-full hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-accent-500 text-white rounded-full hover:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
-                    <Send size={14} />
+                    <Send size={13} />
                   </button>
                 </form>
               </div>
@@ -715,16 +705,16 @@ export const PostCard = ({ post }) => {
               {/* Comments List */}
               {isLoadingComments ? (
                 <div className="flex justify-center py-4">
-                  <div className="w-5 h-5 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-accent-500/30 border-t-accent-500 rounded-full animate-spin"></div>
                 </div>
               ) : commentsList.length > 0 ? (
-                <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-4 max-h-60 overflow-y-auto pr-2">
                   {commentsList.map(comment => (
                     <CommentItem key={comment._id} comment={comment} postId={post._id} user={user} />
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-sm text-slate-500 py-4">No comments yet. Be the first!</p>
+                <p className="text-center text-sm text-text-muted py-4">No comments yet. Be the first!</p>
               )}
             </div>
           </motion.div>

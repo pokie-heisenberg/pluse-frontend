@@ -28,42 +28,42 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary-600/20 rounded-full mix-blend-screen filter blur-[120px] animate-blob"></div>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent-500/10 rounded-full mix-blend-screen filter blur-[120px] animate-blob" style={{ animationDelay: '2s' }}></div>
+    <div className="min-h-screen bg-bg-primary flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent-500/[0.06] rounded-full blur-[120px]" />
 
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-md relative z-10"
       >
-        <div className="bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border border-white/10 shadow-2xl">
+        <div className="bg-bg-tertiary p-8 rounded-2xl border border-border-default shadow-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Forgot Password</h1>
-            <p className="text-slate-400 mt-2">Enter your email to receive a reset link</p>
+            <h1 className="font-display text-3xl text-text-primary">Forgot Password</h1>
+            <p className="text-text-tertiary mt-2 text-sm">Enter your email to receive a reset link</p>
           </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl mb-6 text-sm text-center">
+            <div className="bg-danger/10 border border-danger/20 text-danger p-3 rounded-xl mb-6 text-sm text-center font-medium">
               {error}
             </div>
           )}
           {message && (
-            <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-3 rounded-xl mb-6 text-sm text-center">
+            <div className="bg-success/10 border border-success/20 text-success p-3 rounded-xl mb-6 text-sm text-center font-medium">
               {message}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative group">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-400 transition-colors" size={20} />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-accent-400 transition-colors" size={18} />
               <input 
                 type="email" 
                 required
                 placeholder="Email address" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-500/50 transition-colors"
+                className="w-full bg-bg-secondary border border-border-default rounded-xl py-3 pl-11 pr-4 text-text-primary placeholder-text-muted focus:outline-none focus:border-border-focus focus:shadow-[0_0_0_3px_rgba(99,102,241,0.12)] transition-all text-sm"
               />
             </div>
 
@@ -72,8 +72,8 @@ export const ForgotPassword = () => {
             </Button>
           </form>
 
-          <p className="mt-8 text-center text-slate-400 text-sm">
-            Remember your password? <Link to="/login" className="text-primary-400 font-semibold hover:text-primary-300">Log in</Link>
+          <p className="mt-8 text-center text-text-tertiary text-sm">
+            Remember your password? <Link to="/login" className="text-accent-400 font-semibold hover:text-accent-300 transition-colors">Log in</Link>
           </p>
         </div>
       </motion.div>
