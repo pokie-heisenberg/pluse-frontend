@@ -98,10 +98,10 @@ const CommentItem = ({ comment, postId, user }) => {
   return (
     <div className="flex flex-col space-y-1.5">
       <div className="flex space-x-3">
-        <img src={comment.author.profileImage} alt={comment.author.name} className="w-8 h-8 rounded-full object-cover mt-0.5 ring-1 ring-border-subtle" />
+        <img src={comment.author?.profileImage || 'https://ui-avatars.com/api/?name=User'} alt={comment.author?.name || 'User'} className="w-8 h-8 rounded-full object-cover mt-0.5 ring-1 ring-border-subtle" />
         <div className="flex-1 bg-bg-elevated p-3 rounded-xl rounded-tl-sm">
           <div className="flex justify-between items-baseline mb-1">
-            <span className="font-semibold text-sm text-text-primary">{comment.author.name}</span>
+            <span className="font-semibold text-sm text-text-primary">{comment.author?.name || 'Unknown User'}</span>
             <span className="font-mono text-[10px] text-text-muted uppercase tracking-wider">{new Date(comment.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
           </div>
           {isEditing ? (
@@ -402,15 +402,15 @@ export const PostCard = ({ post }) => {
       <div className="flex justify-between items-start mb-3">
         <div 
           className="flex items-center space-x-3 cursor-pointer"
-          onClick={() => navigate(`/profile/${post.author._id}`)}
+          onClick={() => navigate(`/profile/${post.author?._id}`)}
         >
           <img 
-            src={post.author.profileImage} 
-            alt={post.author.name} 
+            src={post.author?.profileImage || 'https://ui-avatars.com/api/?name=User'} 
+            alt={post.author?.name || 'User'} 
             className="w-10 h-10 rounded-full object-cover ring-2 ring-border-subtle group-hover:ring-accent-500/30 transition-all duration-300"
           />
           <div>
-            <h3 className="font-semibold text-text-primary text-[14.5px] tracking-wide hover:text-accent-400 transition-colors">{post.author.name}</h3>
+            <h3 className="font-semibold text-text-primary text-[14.5px] tracking-wide hover:text-accent-400 transition-colors">{post.author?.name || 'Unknown User'}</h3>
             <p className="font-mono text-[11px] text-text-muted tracking-wider uppercase">
               {new Date(post.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
             </p>
