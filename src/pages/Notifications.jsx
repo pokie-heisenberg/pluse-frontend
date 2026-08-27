@@ -9,7 +9,8 @@ const getIconForType = (type) => {
   switch (type) {
     case 'like': return <Heart size={18} className="text-danger fill-danger" />;
     case 'comment': return <MessageCircle size={18} className="text-info fill-info/20" />;
-    case 'follow': return <UserPlus size={18} className="text-success" />;
+    case 'follow': 
+    case 'follow_request': return <UserPlus size={18} className="text-success" />;
     default: return <Bell size={18} className="text-accent-400" />;
   }
 };
@@ -52,8 +53,9 @@ export const Notifications = () => {
     }
   };
 
-  const handleAcceptFollow = async (senderId, notificationId) => {
+  const handleAcceptFollow = async (sender, notificationId) => {
     try {
+      const senderId = typeof sender === 'object' ? sender?._id : sender;
       await acceptFollow(senderId);
       toast.success('Follow request accepted!');
       setNotifications(prev => prev.filter(n => n._id !== notificationId));
@@ -63,8 +65,9 @@ export const Notifications = () => {
     }
   };
 
-  const handleDeclineFollow = async (senderId, notificationId) => {
+  const handleDeclineFollow = async (sender, notificationId) => {
     try {
+      const senderId = typeof sender === 'object' ? sender?._id : sender;
       await declineFollow(senderId);
       await deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n._id !== notificationId));
@@ -139,7 +142,7 @@ export const Notifications = () => {
                   {notification.type === 'follow_request' && (
                     <div className="mt-2.5 flex space-x-2">
                       <Button 
-                        onClick={() => handleAcceptFollow(notification.sender?._id, notification._id)}
+                        onClick={() => handleAcceptFollow(notification.sender, notification._id)}
                         className="py-1 px-3 text-xs"
                         size="sm"
                       >
@@ -147,7 +150,7 @@ export const Notifications = () => {
                       </Button>
                       <Button 
                         variant="secondary"
-                        onClick={() => handleDeclineFollow(notification.sender?._id, notification._id)}
+                        onClick={() => handleDeclineFollow(notification.sender, notification._id)}
                         className="py-1 px-3 text-xs"
                         size="sm"
                       >

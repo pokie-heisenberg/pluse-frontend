@@ -38,10 +38,10 @@ export const Sidebar = () => {
     }
   }, [user, location.pathname]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     close();
-    navigate('/');
-    setTimeout(() => { logout(); }, 10);
+    await logout();
+    navigate('/login');
   };
 
   const navItems = [
