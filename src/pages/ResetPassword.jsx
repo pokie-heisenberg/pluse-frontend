@@ -29,9 +29,10 @@ export const ResetPassword = () => {
     try {
       const response = await resetPassword(token, password, passwordConfirm);
       
-      const userData = response.data?.user || response.data?.doc || response;
+      const userData = response.data?.user || response.data?.doc || response.data?.data?.user || response.data || response;
       if (userData) {
-        login(userData, response.token);
+        const authToken = response.token || response.data?.token || response.accessToken || (response.data && response.data.token);
+        login(userData, authToken);
       }
 
       setSuccess(true);

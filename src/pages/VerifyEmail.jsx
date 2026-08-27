@@ -24,9 +24,10 @@ export const VerifyEmail = () => {
         setStatus('loading');
         const response = await verifyEmail(token);
         // Backend returns user + token on success
-        const userData = response.data?.user || response.data?.doc;
+        const userData = response.data?.user || response.data?.doc || response.data?.data?.user || response.data || response;
         if (userData) {
-          login(userData, response.token);
+          const authToken = response.token || response.data?.token || response.accessToken || (response.data && response.data.token);
+          login(userData, authToken);
         }
         setStatus('success');
         setTimeout(() => navigate('/'), 3000);

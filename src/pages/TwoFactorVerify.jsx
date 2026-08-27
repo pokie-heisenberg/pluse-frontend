@@ -71,8 +71,9 @@ export const TwoFactorVerify = () => {
     setError('');
     try {
       const response = await verifyOTP(userId, otp);
-      const userData = response.data?.user || response.data?.doc;
-      login(userData, response.token);
+      const userData = response.data?.user || response.data?.doc || response.data?.data?.user || response.data || response;
+      const token = response.token || response.data?.token || response.accessToken || (response.data && response.data.token);
+      login(userData, token);
       navigate('/', { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid or expired OTP. Please try again.');

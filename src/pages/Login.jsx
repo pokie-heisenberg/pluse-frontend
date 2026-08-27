@@ -28,8 +28,9 @@ export const Login = () => {
         return;
       }
 
-      const userData = response.data?.user || response.data?.doc || response;
-      login(userData, response.token);
+      const userData = response.data?.user || response.data?.doc || response.data?.data?.user || response.data || response;
+      const token = response.token || response.data?.token || response.accessToken || (response.data && response.data.token);
+      login(userData, token);
       navigate('/');
     } catch (err) {
       setError('Invalid email or password');

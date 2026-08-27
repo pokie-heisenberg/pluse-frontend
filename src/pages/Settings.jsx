@@ -50,7 +50,9 @@ export const Settings = () => {
     try {
       const res = await updateProfile({ name, location }, photo);
       // Update local context state
-      login(res.data.updateUser || res.data.doc || res.data.user);
+      const userData = res.data?.updateUser || res.data?.doc || res.data?.user || res.data?.data?.user || res.data || res;
+      const authToken = res.token || res.data?.token || res.accessToken || (res.data && res.data.token);
+      login(userData, authToken);
       setSuccessMsg('Profile updated successfully!');
     } catch (error) {
       console.error(error);
@@ -68,7 +70,9 @@ export const Settings = () => {
     setPasswordMsg({ type: '', text: '' });
     try {
       const res = await updatePassword(passwordCurrent, passwordNew, passwordConfirm);
-      login(res.data.user);
+      const userData = res.data?.user || res.data?.doc || res.data?.data?.user || res.data || res;
+      const authToken = res.token || res.data?.token || res.accessToken || (res.data && res.data.token);
+      login(userData, authToken);
       setPasswordMsg({ type: 'success', text: 'Password updated successfully!' });
       setPasswordCurrent('');
       setPasswordNew('');
