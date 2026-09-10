@@ -145,7 +145,7 @@ export const Messages = () => {
       setSearchResults([]);
     } catch (error) {
       console.error(error);
-      toast.error('Error fetching the chat');
+      toast.error(error.response?.data?.message || error.message || 'Error fetching the chat');
     }
   };
 
