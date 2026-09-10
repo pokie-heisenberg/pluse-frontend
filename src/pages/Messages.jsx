@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, ArrowLeft, Search as SearchIcon, MoreVertical, MessageSquare } from 'lucide-react';
 import io from 'socket.io-client';
 import { useAuth } from '../contexts/AuthContext';
-import { fetchChats, accessChat, fetchMessages, sendMessage, searchUsers } from '../services/api';
+import { fetchChats, accessChat, fetchMessages, sendMessage, searchUsers, getUserFollowing } from '../services/api';
 import toast from 'react-hot-toast';
 
 const ENDPOINT = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api/v1', '') : 'http://localhost:8000';
@@ -26,6 +26,8 @@ export const Messages = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  
+  const [suggestedUsers, setSuggestedUsers] = useState([]);
 
   const messagesEndRef = useRef(null);
 
@@ -42,10 +44,22 @@ export const Messages = () => {
     };
   }, [user]);
 
-  // Load Chats
+  // Load Chats and Suggested Users
   useEffect(() => {
     loadChats();
-  }, []);
+    if (user?._id) {
+      loadSuggestedUsers();
+    }
+  }, [user]);
+
+  const loadSuggestedUsers = async () => {
+    try {
+      const data = await getUserFollowing(user._id);
+      setSuggestedUsers(data.data?.users || []);
+    } catch (error) {
+      console.error('Failed to load suggested users', error);
+    }
+  };
 
   const loadChats = async () => {
     try {
@@ -233,6 +247,28 @@ export const Messages = () => {
             />
           </div>
         </div>
+
+        {!searchQuery && suggestedUsers.length > 0 && (
+          <div className="px-4 py-3 border-b border-border-subtle overflow-x-auto no-scrollbar whitespace-nowrap bg-bg-primary">
+            {suggestedUsers.map(su => (
+              <div 
+                key={su._id} 
+                onClick={() => handleAccessChat(su._id)}
+                className="inline-flex flex-col items-center justify-center mr-4 cursor-pointer group w-14 align-top"
+                title={su.name}
+              >
+                <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-accent-400 to-accent-600 p-[2px] mb-1">
+                  <div className="bg-bg-primary w-full h-full rounded-full p-[2px]">
+                    <img src={su.profileImage} alt={su.name} className="w-full h-full rounded-full object-cover group-hover:opacity-80 transition-opacity" />
+                  </div>
+                </div>
+                <span className="text-[11px] font-medium text-text-secondary group-hover:text-text-primary truncate w-full text-center">
+                  {su.name.split(' ')[0]}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="flex-1 overflow-y-auto no-scrollbar">
           {searchQuery ? (
