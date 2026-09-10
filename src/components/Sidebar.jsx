@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Home, User as UserIcon, Bell, Bookmark,
+  Home, User as UserIcon, Bell, Bookmark, MessageSquare,
   Settings as SettingsIcon, LogOut, Search as SearchIcon, X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -49,6 +49,7 @@ export const Sidebar = () => {
     { icon: SearchIcon,  label: 'Search',        path: '/search' },
     ...(user ? [
       { icon: Bell,         label: 'Notifications', path: '/notifications' },
+      { icon: MessageSquare,label: 'Messages',      path: '/messages' },
       { icon: Bookmark,     label: 'Bookmarks',     path: '/bookmarks' },
       { icon: UserIcon,     label: 'Profile',       path: '/profile' },
       { icon: SettingsIcon, label: 'Settings',      path: '/settings' },

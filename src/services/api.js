@@ -245,3 +245,27 @@ export const unbookmarkPost = async (postId) => {
   const response = await apiClient.delete(`/posts/${postId}/bookmark`);
   return response.data;
 };
+
+// ==========================================
+// CHATS & MESSAGES
+// ==========================================
+
+export const fetchChats = async () => {
+  const response = await apiClient.get('/chats');
+  return response.data;
+};
+
+export const accessChat = async (userId) => {
+  const response = await apiClient.post('/chats', { userId });
+  return response.data;
+};
+
+export const fetchMessages = async (chatId) => {
+  const response = await apiClient.get(`/messages/${chatId}`);
+  return response.data;
+};
+
+export const sendMessage = async (chatId, content) => {
+  const response = await apiClient.post('/messages', { chatId, content });
+  return response.data;
+};

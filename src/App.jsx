@@ -13,6 +13,7 @@ import { Settings } from './pages/Settings';
 import { Search } from './pages/Search';
 import { Notifications } from './pages/Notifications';
 import { Bookmarks } from './pages/Bookmarks';
+import { Messages } from './pages/Messages';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
@@ -44,6 +45,7 @@ function AppRoutes() {
         <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
         <Route path="bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
+        <Route path="messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
       </Route>
       
       {/* Auth Routes (No Sidebar) */}

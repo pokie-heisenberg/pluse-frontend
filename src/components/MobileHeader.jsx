@@ -1,4 +1,4 @@
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSidebar } from '../contexts/SidebarContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -68,6 +68,9 @@ export const MobileHeader = () => {
               {hasUnread && (
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full z-20" style={{ animation: 'subtlePulse 2s infinite' }} />
               )}
+            </Link>
+            <Link to="/messages" aria-label="Messages" className="p-2 text-text-tertiary hover:text-text-primary hover:bg-bg-elevated rounded-xl transition-all">
+              <MessageSquare size={20} />
             </Link>
             <Link to="/profile" aria-label="My profile">
               <img
