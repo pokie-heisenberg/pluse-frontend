@@ -251,23 +251,23 @@ export const Messages = () => {
 
         {!searchQuery && suggestedUsers.length > 0 && (
           <div className="px-4 py-3 border-b border-border-subtle overflow-x-auto no-scrollbar whitespace-nowrap bg-bg-primary">
-            {suggestedUsers.map(su => (
+            {suggestedUsers.map(su => su ? (
               <div 
                 key={su._id} 
                 onClick={() => handleAccessChat(su._id)}
                 className="inline-flex flex-col items-center justify-center mr-4 cursor-pointer group w-14 align-top"
-                title={su.name}
+                title={su?.name || ''}
               >
                 <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-accent-400 to-accent-600 p-[2px] mb-1">
                   <div className="bg-bg-primary w-full h-full rounded-full p-[2px]">
-                    <img src={su.profileImage} alt={su.name} className="w-full h-full rounded-full object-cover group-hover:opacity-80 transition-opacity" />
+                    <img src={su?.profileImage} alt={su?.name || ''} className="w-full h-full rounded-full object-cover group-hover:opacity-80 transition-opacity" />
                   </div>
                 </div>
                 <span className="text-[11px] font-medium text-text-secondary group-hover:text-text-primary truncate w-full text-center">
                   {su?.name?.split(' ')[0]}
                 </span>
               </div>
-            ))}
+            ) : null)}
           </div>
         )}
 
@@ -321,8 +321,8 @@ export const Messages = () => {
                         <p className="font-semibold text-text-primary text-sm truncate">{getChatName(chat)}</p>
                       </div>
                       {chat.latestMessage && (
-                        <p className={`text-xs truncate ${chat.latestMessage.sender._id !== user._id && !chat.latestMessage.read ? 'text-text-primary font-medium' : 'text-text-tertiary'}`}>
-                          {chat.latestMessage.sender._id === user._id ? 'You: ' : ''}
+                        <p className={`text-xs truncate ${chat.latestMessage.sender?._id !== user._id && !chat.latestMessage.read ? 'text-text-primary font-medium' : 'text-text-tertiary'}`}>
+                          {chat.latestMessage.sender?._id === user._id ? 'You: ' : ''}
                           {chat.latestMessage.content}
                         </p>
                       )}
@@ -382,8 +382,8 @@ export const Messages = () => {
               ) : (
                 <>
                   {messages.map((m, i) => {
-                    const isSender = m.sender._id === user._id;
-                    const showAvatar = !isSender && (i === messages.length - 1 || messages[i + 1].sender._id !== m.sender._id);
+                    const isSender = m.sender?._id === user._id;
+                    const showAvatar = !isSender && (i === messages.length - 1 || messages[i + 1]?.sender?._id !== m.sender?._id);
                     
                     return (
                       <div key={m._id} className={`flex ${isSender ? 'justify-end' : 'justify-start'} mb-1`}>
