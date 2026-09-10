@@ -55,7 +55,8 @@ export const Messages = () => {
   const loadSuggestedUsers = async () => {
     try {
       const data = await getUserFollowing(user._id);
-      setSuggestedUsers(data.data?.users || []);
+      const validUsers = (data.data?.users || []).filter(u => u !== null && u !== undefined);
+      setSuggestedUsers(validUsers);
     } catch (error) {
       console.error('Failed to load suggested users', error);
     }
@@ -263,7 +264,7 @@ export const Messages = () => {
                   </div>
                 </div>
                 <span className="text-[11px] font-medium text-text-secondary group-hover:text-text-primary truncate w-full text-center">
-                  {su.name.split(' ')[0]}
+                  {su?.name?.split(' ')[0]}
                 </span>
               </div>
             ))}
