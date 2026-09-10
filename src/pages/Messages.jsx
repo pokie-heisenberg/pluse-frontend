@@ -50,8 +50,8 @@ export const Messages = () => {
   const loadChats = async () => {
     try {
       setLoadingChats(true);
-      const data = await fetchChats();
-      setChats(data.data?.chats || data);
+      const response = await fetchChats();
+      setChats(response.data || response);
     } catch (error) {
       console.error(error);
       toast.error('Failed to load chats');
@@ -66,8 +66,8 @@ export const Messages = () => {
       if (!selectedChat) return;
       try {
         setLoadingMessages(true);
-        const data = await fetchMessages(selectedChat._id);
-        setMessages(data.data?.messages || data);
+        const response = await fetchMessages(selectedChat._id);
+        setMessages(response.data || response);
         socket.emit('join chat', selectedChat._id);
       } catch (error) {
         console.error(error);
@@ -119,8 +119,8 @@ export const Messages = () => {
 
   const handleAccessChat = async (userId) => {
     try {
-      const data = await accessChat(userId);
-      const newChat = data.data?.chat || data;
+      const response = await accessChat(userId);
+      const newChat = response.data || response;
       
       // If chat already exists in state, just select it, else append
       if (!chats.find(c => c._id === newChat._id)) {
@@ -165,8 +165,8 @@ export const Messages = () => {
         const content = newMessage;
         setNewMessage(''); // Clear immediately for better UX
         
-        const data = await sendMessage(selectedChat._id, content);
-        const savedMessage = data.data?.message || data;
+        const response = await sendMessage(selectedChat._id, content);
+        const savedMessage = response.data || response;
         
         socket.emit('new message', savedMessage);
         setMessages([...messages, savedMessage]);
@@ -187,8 +187,8 @@ export const Messages = () => {
         const content = newMessage;
         setNewMessage('');
         
-        const data = await sendMessage(selectedChat._id, content);
-        const savedMessage = data.data?.message || data;
+        const response = await sendMessage(selectedChat._id, content);
+        const savedMessage = response.data || response;
         
         socket.emit('new message', savedMessage);
         setMessages([...messages, savedMessage]);
